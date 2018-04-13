@@ -1,4 +1,4 @@
-package imnotpayingforthat.com.imnotpayingforthat;
+package com.imnotpayingforthat.imnotpayingforthat;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("imnotpayingforthat.com.imnotpayingforthat", appContext.getPackageName());
+        assertEquals("com.imnotpayingforthat.imnotpayingforthat", appContext.getPackageName());
     }
 }

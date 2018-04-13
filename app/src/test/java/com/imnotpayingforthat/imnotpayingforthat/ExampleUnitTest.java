@@ -1,4 +1,4 @@
-package imnotpayingforthat.com.imnotpayingforthat;
+package com.imnotpayingforthat.imnotpayingforthat;
 
 import org.junit.Test;
 

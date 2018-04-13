@@ -1,4 +1,4 @@
-package imnotpayingforthat.com.imnotpayingforthat;
+package com.imnotpayingforthat.imnotpayingforthat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
