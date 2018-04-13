@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "238538861712",
+    "firebase_url": "https://imnotpayingforthat-f48f0.firebaseio.com",
+    "project_id": "imnotpayingforthat-f48f0",
+    "storage_bucket": "imnotpayingforthat-f48f0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:238538861712:android:09545aaa92863659",
+        "android_client_info": {
+          "package_name": "com.imnotpayingforthat.imnotpayingforthat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "238538861712-ls6d03g1r7j84d42cjeds6e24u2p0t9c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtLFm0ghWpM4wrk_1fGp1xDnedi0YRPYs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
