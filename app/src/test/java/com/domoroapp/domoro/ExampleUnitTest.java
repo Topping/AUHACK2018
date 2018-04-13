@@ -1,4 +1,4 @@
-package com.imnotpayingforthat.imnotpayingforthat;
+package com.domoroapp.domoro;
 
 import org.junit.Test;
 

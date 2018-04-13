@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.imnotpayingforthat.imnotpayingforthat.views.LoginActivity"
+    tools:context="com.domoroapp.domoro.views.LoginActivity"
     tools:layout_editor_absoluteY="81dp"
     android:background="@drawable/gradient">
 
@@ -31,9 +31,9 @@
         android:text="Register"
         android:textColor="@android:color/background_light"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="@+id/login_button_loginButton"
-        app:layout_constraintStart_toStartOf="@+id/login_button_loginButton"
-        app:layout_constraintTop_toBottomOf="@+id/login_button_loginButton" />
+        app:layout_constraintEnd_toEndOf="@+id/button_loginButton"
+        app:layout_constraintStart_toStartOf="@+id/button_loginButton"
+        app:layout_constraintTop_toBottomOf="@+id/button_loginButton" />
 
     <EditText
         android:id="@+id/editText_password"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/login_button_loginButton"
+        android:id="@+id/button_loginButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"

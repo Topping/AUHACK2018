@@ -3,11 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.imnotpayingforthat.imnotpayingforthat"
-        minSdkVersion 21
+        applicationId "com.domoroapp.domoro"
+        minSdkVersion 17
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        resConfigs "en"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -17,8 +18,11 @@ android {
         }
     }
     compileOptions {
-        targetCompatibility 1.8
-        sourceCompatibility 1.8
+        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+    }
+    buildToolsVersion '27.0.3'
+    dexOptions {
     }
 }
 
@@ -48,9 +52,14 @@ dependencies {
     implementation "com.google.android.gms:play-services-auth:${FIREBASEVERSION}"
     //Facebook Login
     implementation 'com.facebook.android:facebook-login:4.31.0'
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation "com.android.support:design:${SUPPORTVERSION}"
     implementation "com.android.support:customtabs:${SUPPORTVERSION}"
     implementation "com.android.support:cardview-v7:${SUPPORTVERSION}"
+    //Firebase UI - Auth
+    implementation 'com.firebaseui:firebase-ui-auth:3.3.0'
     //Circleimage view
     implementation 'de.hdodenhof:circleimageview:2.2.0'
     //Firebase Database
