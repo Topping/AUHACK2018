@@ -14,6 +14,7 @@ gen/
 out/
 
 # Gradle files
+*/.gradle
 .gradle/
 build/
 
@@ -33,6 +34,7 @@ proguard/
 captures/
 
 # Intellij
+*/.idea
 *.iml
 .idea/workspace.xml
 .idea/tasks.xml
@@ -47,9 +49,13 @@ captures/
 .externalNativeBuild
 
 # Google Services (e.g. APIs or Firebase)
-google-services.json
+
 
 # Freeline
 freeline.py
 freeline/
 freeline_project_description.json
+
+*.ser
+
+FinalProject/DoMoro/\.idea/
