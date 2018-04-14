@@ -3,6 +3,7 @@ package com.imnotpayingforthat.imnotpayingforthat.models;
 public class ShoppingListItem {
     private String itemName;
     private Double itemPrice;
+    private String id;
 
     public ShoppingListItem() {}
 
@@ -26,5 +27,13 @@ public class ShoppingListItem {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

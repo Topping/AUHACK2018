@@ -32,7 +32,6 @@ public class ShoppingItemRecyclerAdapter extends FirestoreRecyclerAdapter<Shoppi
     public ShoppingItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_shoppinglist_listitem, parent, false);
-
         return new ShoppingItemViewHolder(v);
     }
 
@@ -41,5 +40,5 @@ public class ShoppingItemRecyclerAdapter extends FirestoreRecyclerAdapter<Shoppi
         Log.d(TAG, "Setting item: " + position + " - " + model.getItemName());
         holder.getItemName().setText(model.getItemName());
         holder.getItemPrice().setText(model.getItemPrice().toString());
-    }
+        }
 }

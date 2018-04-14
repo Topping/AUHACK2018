@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.imnotpayingforthat.imnotpayingforthat.models.ShoppingListItem;
 import com.imnotpayingforthat.imnotpayingforthat.models.User;
 import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -64,6 +66,24 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    private void setupItemTouchHelper() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                int swipedPosition = viewHolder.getAdapterPosition();
+                // TODO: 15-04-2018 GET THAT ID! AND DELETE AT THIS POSITION! 
+                Toast.makeText(getActivity(),String.valueOf(swipedPosition), Toast.LENGTH_SHORT).show();
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(itemList);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -74,6 +94,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         setupRecyclerview();
         itemPriceEditText = v.findViewById(R.id.shoppinglist_edittext_itemprice);
         itemNameEditText = v.findViewById(R.id.shoppinglist_edittext_itemname);
+        setupItemTouchHelper();
         return v;
     }
 
@@ -88,6 +109,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                 .setQuery(query, ShoppingListItem.class)
                 .setLifecycleOwner(this)
                 .build();
+
 
         adapter = new ShoppingItemRecyclerAdapter(options);
         itemList.setHasFixedSize(true);
@@ -116,7 +138,6 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
 
     public void setRecyclerViewLayoutManager(Globals.LayoutManagerType layoutManagerType) {
         int scrollPosition = 0;
-
         // If a layout manager has already been set, get current scroll position.
         if (itemList.getLayoutManager() != null) {
             scrollPosition = ((LinearLayoutManager) itemList.getLayoutManager())
