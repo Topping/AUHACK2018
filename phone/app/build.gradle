@@ -84,5 +84,7 @@ dependencies {
     implementation "com.google.firebase:firebase-firestore:${FIREBASEVERSION}"
 
     wearApp project(':wearapp')
+
+    compile 'com.google.firebase:firebase-messaging:15.0.0'
 }
 apply plugin: 'com.google.gms.google-services'
