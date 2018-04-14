@@ -96,7 +96,7 @@ public class TeamListFragment extends Fragment {
                 .setQuery(query, Team.class)
                 .setLifecycleOwner(this)
                 .build();
-        adapter = new TeamRecyclerAdapter(options);
+        adapter = new TeamRecyclerAdapter(options, getContext());
 
         recyclerView = view.findViewById(R.id.team_recyclerView_teamList);
         recyclerView.setHasFixedSize(true);

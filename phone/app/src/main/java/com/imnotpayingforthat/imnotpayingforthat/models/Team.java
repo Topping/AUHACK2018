@@ -11,6 +11,16 @@ public class Team {
     private String ownerUid;
     private List<String> members;
 
+    public Uri getIconUri() {
+        return iconUri;
+    }
+
+    public void setIconUri(Uri iconUri) {
+        this.iconUri = iconUri;
+    }
+
+    private Uri iconUri;
+
     public List<String> getMembers() {
         return members;
     }
