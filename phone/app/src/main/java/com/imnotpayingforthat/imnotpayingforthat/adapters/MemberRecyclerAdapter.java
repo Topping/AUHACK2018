@@ -12,7 +12,8 @@ import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.models.User;
 import com.imnotpayingforthat.imnotpayingforthat.viewholders.MemberViewHolder;
 
-public class MemberRecyclerAdapter extends FirestoreRecyclerAdapter<User, MemberViewHolder> {
+public class MemberRecyclerAdapter
+        extends FirestoreRecyclerAdapter<User, MemberViewHolder> {
 
     private static final String TAG = "MemberRecyclerAdapter";
     /**
@@ -38,6 +39,7 @@ public class MemberRecyclerAdapter extends FirestoreRecyclerAdapter<User, Member
     public MemberViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_team_details_listitem, parent, false);
-        return new MemberViewHolder(v);
+        MemberViewHolder m = new MemberViewHolder(v);
+        return m;
     }
 }

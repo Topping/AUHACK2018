@@ -1,16 +1,19 @@
 package com.imnotpayingforthat.imnotpayingforthat.models;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class User {
     private String firstName;
     private String lastName;
     private String profile_Image;
-    private List<Team> teams;
+    private Map<String, Boolean> teams;
 
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        teams = new HashMap<>();
     }
 
     public User() {
@@ -40,12 +43,16 @@ public class User {
         this.profile_Image = profile_Image;
     }
 
-    public List<Team> getTeams() {
+    public Map<String, Boolean> getTeams() {
         return teams;
     }
 
-    public void setTeams(List<Team> teams) {
+    public void setTeams(Map<String, Boolean> teams) {
         this.teams = teams;
+    }
+
+    public void addTeam(String teamId) {
+        teams.put(teamId, true);
     }
 
     @Override

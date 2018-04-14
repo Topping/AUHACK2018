@@ -14,7 +14,7 @@ import com.imnotpayingforthat.imnotpayingforthat.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ShoppingListFragment.OnFragmentInteractionListener} interface
+ * {@link OnShoppingListInteractionListener} interface
  * to handle interaction events.
  * Use the {@link ShoppingListFragment#newInstance} factory method to
  * create an instance of this fragment.
@@ -22,7 +22,7 @@ import com.imnotpayingforthat.imnotpayingforthat.R;
 public class ShoppingListFragment extends Fragment {
 
     private static final String TAG = "ShoppingListFragment";
-    private OnFragmentInteractionListener mListener;
+    private OnShoppingListInteractionListener mListener;
     private RecyclerView memberList;
 
     public ShoppingListFragment() {
@@ -50,11 +50,11 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnShoppingListInteractionListener) {
+            mListener = (OnShoppingListInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnShoppingListInteractionListener");
         }
     }
 
@@ -74,7 +74,7 @@ public class ShoppingListFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnShoppingListInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
