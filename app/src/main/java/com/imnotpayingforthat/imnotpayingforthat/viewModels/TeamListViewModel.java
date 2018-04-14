@@ -1,4 +1,4 @@
-package com.domoroapp.domoro.viewModels;
+package com.imnotpayingforthat.imnotpayingforthat.viewModels;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -6,7 +6,7 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 
-import com.domoroapp.domoro.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 
 import java.util.ArrayList;
 import java.util.List;

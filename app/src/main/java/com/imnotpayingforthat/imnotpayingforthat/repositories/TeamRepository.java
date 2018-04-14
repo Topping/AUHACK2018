@@ -1,8 +1,8 @@
-package com.domoroapp.domoro.repositories;
+package com.imnotpayingforthat.imnotpayingforthat.repositories;
 
 import android.util.Log;
 
-import com.domoroapp.domoro.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class TeamRepository {

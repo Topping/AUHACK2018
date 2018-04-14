@@ -1,4 +1,4 @@
-package com.domoroapp.domoro.views;
+package com.imnotpayingforthat.imnotpayingforthat.views;
 
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -16,10 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.domoroapp.domoro.R;
-import com.domoroapp.domoro.TestQueryActivity;
-import com.domoroapp.domoro.viewModels.MainViewModel;
-import com.facebook.login.LoginManager;
+import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
+import com.imnotpayingforthat.imnotpayingforthat.viewModels.MainViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -153,10 +152,6 @@ public class MainActivity extends AppCompatActivity
                                 .build();
                         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
                         googleSignInClient.signOut();
-                        redirectLoginScreen();
-                        break;
-                    case "facebook.com":
-                        LoginManager.getInstance().logOut();
                         redirectLoginScreen();
                         break;
                 }

@@ -1,4 +1,4 @@
-package com.domoroapp.domoro.adapters;
+package com.imnotpayingforthat.imnotpayingforthat.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.domoroapp.domoro.R;
-import com.domoroapp.domoro.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import java.util.Objects;

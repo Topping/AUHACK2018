@@ -1,4 +1,4 @@
-package com.domoroapp.domoro.repositories;
+package com.imnotpayingforthat.imnotpayingforthat.repositories;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 

@@ -1,4 +1,4 @@
-package com.domoroapp.domoro;
+package com.imnotpayingforthat.imnotpayingforthat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.domoroapp.domoro.models.Team;
-import com.domoroapp.domoro.models.User;
+import com.imnotpayingforthat.imnotpayingforthat.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;

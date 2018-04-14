@@ -1,4 +1,4 @@
-package com.domoroapp.domoro.views;
+package com.imnotpayingforthat.imnotpayingforthat.views;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
@@ -14,10 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.domoroapp.domoro.R;
-import com.domoroapp.domoro.adapters.TeamRecyclerAdapter;
-import com.domoroapp.domoro.models.Team;
-import com.domoroapp.domoro.viewModels.TeamListViewModel;
+import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.adapters.TeamRecyclerAdapter;
+import com.imnotpayingforthat.imnotpayingforthat.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.viewModels.TeamListViewModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -69,7 +69,6 @@ public class TeamListFragment extends Fragment {
         Query query = FirebaseFirestore.getInstance()
                 .collection("teams")
                 .orderBy("teamName")
-                .whereEqualTo(memberPath, true)
                 .limit(50);
 
         query.get().addOnSuccessListener(l -> {

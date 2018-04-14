@@ -1,4 +1,4 @@
-package com.domoroapp.domoro.models;
+package com.imnotpayingforthat.imnotpayingforthat.models;
 
 import android.net.Uri;
 
