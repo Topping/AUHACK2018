@@ -1,13 +1,19 @@
 package iamnotpayingwatch.wearable;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.Random;
 
 public class MainActivity extends WearableActivity implements SensorEventListener {
 
@@ -17,7 +23,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     private boolean sensorTest = false;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 2000;
+    private static final int SHAKE_THRESHOLD = 1500;
+    private String lastSpeedTxt = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +68,13 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                 long diffTime = (curTime - lastUpdate);
                 lastUpdate = curTime;
 
-                float speed = Math.abs(x + y + z - last_x - last_y - last_z)/ diffTime * 10000;
+                float speed = (last_x + last_y + last_z - x - y - z)/ diffTime * 10000;
 
-                if (speed > SHAKE_THRESHOLD) {
-                    mTextView.setText(String.valueOf(speed));
+                if (speed > SHAKE_THRESHOLD)
+                {
+                    lastSpeedTxt = lastSpeedTxt + "\n" + String.valueOf((int) speed) + "   " + (int)x + ", " + (int)y + ", " + (int)z;
+                    mTextView.setText(lastSpeedTxt);
+                    playAnimation();
                 }
 
                 last_x = x;
@@ -77,5 +87,13 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    public boolean playAnimation()
+    {
+        ImageView mImageView = new ImageView(this);
+        Bitmap bmImg = BitmapFactory.decodeFile("path of your img1");
+        mImageView.setImageBitmap(bmImg);
+        return true;
     }
 }
