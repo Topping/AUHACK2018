@@ -1,9 +1,12 @@
 package com.imnotpayingforthat.imnotpayingforthat.views;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.net.Uri;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.arch.lifecycle.ViewModelProviders;
@@ -46,10 +49,13 @@ import com.google.firebase.auth.UserInfo;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TeamListFragment.OnTeamFragmentInteractionListener, CreateTeamFragment.OnCreateTeamFragmentListener,
-        TeamDetailsFragment.OnTeamDetailsInteractionListener{
+        TeamDetailsFragment.OnTeamDetailsInteractionListener {
 
     private MainViewModel viewModel;
     private final String TAG = this.getClass().getSimpleName();
+    private ServiceConnection listenService;
+    private ListenService boundListenService;
+    boolean isBound = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +75,30 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        startService(new Intent(this, ListenService.class));
+
+        configureBoundService();
+        Intent intent = new Intent(this, ListenService.class);
+        startService(intent);
+        bindService(intent, listenService, BIND_AUTO_CREATE);
+
         IntentFilter intentFilter = new IntentFilter("GIVEROUND");
         registerReceiver(giveRoundReceiver, intentFilter);
+    }
+
+    private void configureBoundService() {
+        listenService = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+                ListenService.ListenBinder listenBinder = (ListenService.ListenBinder) iBinder;
+                boundListenService = listenBinder.getService();
+                isBound = true;
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName componentName) {
+                isBound = false;
+            }
+        };
     }
 
     @Override
@@ -109,7 +136,12 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        stopService(new Intent(this, ListenService.class));
+
+        if (isBound) {
+            boundListenService.stopService();
+            unbindService(listenService);
+            unregisterReceiver(giveRoundReceiver);
+        }
     }
 
     @Override
@@ -160,9 +192,9 @@ public class MainActivity extends AppCompatActivity
             logOut();
         }
 
-        if(fragmentClass != null) {
+        if (fragmentClass != null) {
             try {
-                if(fragment == null) {
+                if (fragment == null) {
                     fragment = (Fragment) fragmentClass.newInstance();
                 }
                 supportInvalidateOptionsMenu();
@@ -246,6 +278,7 @@ public class MainActivity extends AppCompatActivity
                 .addToBackStack(null)
                 .commit();
     }
+
     @Override
     public void navigateToTeamDetail(Team t) {
         Fragment fragment = TeamDetailsFragment.newInstance(t);
