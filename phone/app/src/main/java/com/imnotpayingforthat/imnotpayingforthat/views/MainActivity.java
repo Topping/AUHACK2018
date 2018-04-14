@@ -214,6 +214,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void navigateToShoppingList() {
+        Fragment fragment = ShoppingListFragment.newInstance();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_frameLayout_fragment, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
     public void navigateToCreateTeam() {
         Fragment fragment = CreateTeamFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
