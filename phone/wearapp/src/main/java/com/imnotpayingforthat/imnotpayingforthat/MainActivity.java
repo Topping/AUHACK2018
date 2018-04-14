@@ -140,6 +140,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                     DateFormat df = new SimpleDateFormat("dd MM yyyy, HH:mm:ss");
                     String date = df.format(Calendar.getInstance().getTime());
                     sendData("Fahlberg gives beer at this time " + date);
+                    Toast.makeText(this, "GAVE A ROUND", Toast.LENGTH_SHORT).show();
                     mSensorManager.unregisterListener(this);
 
                 }
