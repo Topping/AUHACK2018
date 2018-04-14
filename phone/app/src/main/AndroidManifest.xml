@@ -15,7 +15,8 @@
         android:theme="@style/AppTheme.NoActionBar">
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
+
         <activity android:name=".views.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -53,6 +54,15 @@
             android:label="@string/title_activity_timer_screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".TestQueryActivity" />
+
+        <service
+            android:name=".services.register.MyService"
+            android:enabled="true"
+            android:exported="true" />
+        <service
+            android:name=".services.register.ListenService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

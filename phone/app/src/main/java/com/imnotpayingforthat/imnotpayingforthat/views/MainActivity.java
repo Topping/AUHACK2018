@@ -1,5 +1,8 @@
 package com.imnotpayingforthat.imnotpayingforthat.views;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -31,6 +34,7 @@ import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
+import com.imnotpayingforthat.imnotpayingforthat.services.register.ListenService;
 import com.imnotpayingforthat.imnotpayingforthat.viewmodels.MainViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -41,13 +45,10 @@ import com.google.firebase.auth.UserInfo;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TeamListFragment.OnTeamFragmentInteractionListener, CreateTeamFragment.OnCreateTeamFragmentListener,
-        TeamDetailsFragment.OnTeamDetailsInteractionListener,
-        DataClient.OnDataChangedListener{
+        TeamDetailsFragment.OnTeamDetailsInteractionListener{
 
     private MainViewModel viewModel;
     private final String TAG = this.getClass().getSimpleName();
-    String datapath = "/data_path";
-    int num = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        startService(new Intent(this, ListenService.class));
+        IntentFilter intentFilter = new IntentFilter("GIVEROUND");
+        registerReceiver(giveRoundReceiver, intentFilter);
     }
 
     @Override
@@ -83,13 +88,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        Wearable.getDataClient(this).addListener(this);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        Wearable.getDataClient(this).removeListener(this);
     }
 
     @Override
@@ -100,6 +103,12 @@ public class MainActivity extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, ListenService.class));
     }
 
     @Override
@@ -203,6 +212,13 @@ public class MainActivity extends AppCompatActivity
         finish();
     }
 
+    private BroadcastReceiver giveRoundReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(MainActivity.this, intent.getStringExtra("RoundMessage"), Toast.LENGTH_SHORT).show();
+        }
+    };
+
     @Override
     public void navigateToDeleteTeam() {
 
@@ -229,51 +245,5 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.main_frameLayout_fragment, fragment)
                 .addToBackStack(null)
                 .commit();
-    }
-
-    @Override
-    public void onDataChanged(@NonNull DataEventBuffer dataEventBuffer) {
-        Log.d(TAG, "onDataChanged: " + dataEventBuffer);
-        for (DataEvent event : dataEventBuffer) {
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-                String path = event.getDataItem().getUri().getPath();
-                if (datapath.equals(path)) {
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    String message = dataMapItem.getDataMap().getString("message");
-                    Log.v(TAG, "Wear activity received message: " + message);
-                    // Display message in UI
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-                } else {
-                    Log.e(TAG, "Unrecognized path: " + path);
-                }
-            } else if (event.getType() == DataEvent.TYPE_DELETED) {
-                Log.v(TAG, "Data deleted : " + event.getDataItem().toString());
-            } else {
-                Log.e(TAG, "Unknown data event Type = " + event.getType());
-            }
-        }
-    }
-
-    private void sendData(String message) {
-        PutDataMapRequest dataMap = PutDataMapRequest.create(datapath);
-        dataMap.getDataMap().putString("message", message);
-        PutDataRequest request = dataMap.asPutDataRequest();
-        request.setUrgent();
-
-        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
-        dataItemTask
-                .addOnSuccessListener(new OnSuccessListener<DataItem>() {
-                    @Override
-                    public void onSuccess(DataItem dataItem) {
-                        Log.d(TAG, "Sending message was successful: " + dataItem);
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Sending message failed: " + e);
-                    }
-                })
-        ;
     }
 }
