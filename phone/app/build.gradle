@@ -40,6 +40,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.google.android.gms:play-services-wearable:15.0.0'
 
     // Glide dependencies
     implementation 'com.github.bumptech.glide:glide:4.7.1'
@@ -81,5 +82,7 @@ dependencies {
 
     //Firebase Database
     implementation "com.google.firebase:firebase-firestore:${FIREBASEVERSION}"
+
+    wearApp project(':wearapp')
 }
 apply plugin: 'com.google.gms.google-services'
