@@ -15,29 +15,18 @@
         android:padding="@dimen/inner_frame_layout_padding"
         app:boxedEdges="all">
 
-        <TextView
-            android:id="@+id/text"
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/hello_world"
+            android:onClick="ButtonClicked"
+            android:text="GIVE A ROUND"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Button"
-            android:onClick="sendMessage"
-            app:layout_constraintEnd_toEndOf="@+id/text"
-            app:layout_constraintStart_toStartOf="@+id/text"
-            app:layout_constraintTop_toBottomOf="@+id/text" />
-
     </android.support.constraint.ConstraintLayout>
 </android.support.wear.widget.BoxInsetLayout>

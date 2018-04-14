@@ -33,7 +33,7 @@ import java.util.List;
  * Use the {@link TeamDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TeamDetailsFragment extends Fragment {
+public class TeamDetailsFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "TeamDetailsFragment";
     private static final String TEAM_NAME_KEY = "TEAMNAME";
@@ -124,6 +124,15 @@ public class TeamDetailsFragment extends Fragment {
     }
 
     @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.teamdetail_button_list:
+                mListener.navigateToShoppingList();
+               break;
+        }
+    }
+
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnTeamDetailsInteractionListener) {
@@ -180,5 +189,6 @@ public class TeamDetailsFragment extends Fragment {
     public interface OnTeamDetailsInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void navigateToShoppingList();
     }
 }
