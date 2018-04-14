@@ -56,6 +56,7 @@ public class TeamListFragment extends Fragment {
         //noinspection SimplifiableIfStatement
         if (id == R.id.teamlistmenu_action_create) {
             Toast.makeText(this.getContext(), "Clicked add team", Toast.LENGTH_LONG).show();
+            mListener.navigateToCreateTeam();
         }
 
         return super.onOptionsItemSelected(item);
@@ -167,5 +168,6 @@ public class TeamListFragment extends Fragment {
     public interface OnTeamFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+        void navigateToCreateTeam();
     }
 }

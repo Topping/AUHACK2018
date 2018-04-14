@@ -27,7 +27,7 @@ import com.google.firebase.auth.UserInfo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        TeamListFragment.OnTeamFragmentInteractionListener {
+        TeamListFragment.OnTeamFragmentInteractionListener, CreateTeamFragment.OnCreateTeamFragmentListener {
 
     private MainViewModel viewModel;
     private final String TAG = this.getClass().getSimpleName();
@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity
                 supportInvalidateOptionsMenu();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout_fragment, fragment)
+                        .addToBackStack(null)
                         .commit();
             } catch (Exception e) {
                 Log.e(TAG, "Failed to instantiate fragment on navigation");
@@ -168,7 +169,21 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void navigateToDeleteTeam() {
+
+    }
+
+    @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Override
+    public void navigateToCreateTeam() {
+        Fragment fragment = CreateTeamFragment.newInstance();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_frameLayout_fragment, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

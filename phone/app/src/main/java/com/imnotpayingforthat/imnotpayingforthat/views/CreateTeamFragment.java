@@ -8,14 +8,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.TeamRepository;
 
 
-public class CreateTeamFragment extends Fragment {
+public class CreateTeamFragment extends Fragment implements View.OnClickListener {
 
 
     private OnCreateTeamFragmentListener mListener;
+    private static final String TAG = "CreateTeamFragment";
+    private EditText teamNameTextBox;
+    private EditText teamDescriptionTextBox;
+    private TeamRepository teamRepository;
 
     public CreateTeamFragment() {
         // Required empty public constructor
@@ -36,6 +43,10 @@ public class CreateTeamFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_team, container, false);
+        teamNameTextBox = view.findViewById(R.id.createteam_edittext_teamname);
+        teamDescriptionTextBox = view.findViewById(R.id.createteam_edittext_teamdescription);
+        view.findViewById(R.id.createteam_button_cancel).setOnClickListener(this);
+        teamRepository = new TeamRepository();
         return view;
     }
 
@@ -63,8 +74,28 @@ public class CreateTeamFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch(v.getId()){
+            case R.id.createteam_button_cancel:
+                getActivity().getSupportFragmentManager().popBackStack();
+                break;
+            case R.id.createteam_button_ok:
+                Team team = new Team(teamNameTextBox.getText().toString(), teamDescriptionTextBox.getText().toString());
+                teamRepository.createTeam(team, this::createTeamSuccess, this::createTeamFailure);
+
+                break;
+        }
+    }
+
+    private void createTeamSuccess(){
+
+    }
+    private void createTeamFailure(){}
+
+
     public interface OnCreateTeamFragmentListener {
-        void navigateToDeleteTeaem();
+        void navigateToDeleteTeam();
         void onFragmentInteraction(Uri uri);
     }
 }

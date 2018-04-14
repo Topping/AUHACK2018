@@ -21,10 +21,9 @@ public class Team {
 
     public Team() {}
 
-    public Team(String teamName, String teamDescription, String ownerUid, Uri teamIconUri) {
+    public Team(String teamName, String teamDescription) {
         this.teamName = teamName;
         this.teamDescription = teamDescription;
-        this.ownerUid = ownerUid;
     }
 
     public String getTeamName() {
