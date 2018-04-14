@@ -8,7 +8,9 @@ public class User {
     private String firstName;
     private String lastName;
     private String profile_Image;
+    private String FCM_Token;
     private Map<String, Boolean> teams;
+
 
     public User(String firstName, String lastName) {
         this.firstName = firstName;
@@ -17,6 +19,15 @@ public class User {
     }
 
     public User() {
+    }
+
+
+    public String getFCM_Token() {
+        return FCM_Token;
+    }
+
+    public void setFCM_Token(String FCM_Token) {
+        this.FCM_Token = FCM_Token;
     }
 
     public String getFirstName() {

@@ -1,5 +1,8 @@
 package com.imnotpayingforthat.imnotpayingforthat.repositories;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -9,14 +12,14 @@ import com.imnotpayingforthat.imnotpayingforthat.models.UserResponse;
 import com.imnotpayingforthat.imnotpayingforthat.models.User;
 import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
 
-public class UserRespository {
+public class UserRepository {
     private final FirebaseFirestore db;
 
-    public UserRespository(FirebaseFirestore db) {
+    public UserRepository(FirebaseFirestore db) {
         this.db = db;
     }
 
-    public UserRespository() {
+    public UserRepository() {
         this.db = FirebaseFirestore.getInstance();
     }
 
@@ -40,4 +43,15 @@ public class UserRespository {
                 .addOnFailureListener(failureListener);
     }
 
+    public void updateFcmToken(String userUid, String fcmToken){
+        getUser(userUid, l -> {
+            User u = l.toObject(User.class);
+            u.setFCM_Token(fcmToken);
+            db.collection(Globals.dbCollection_user)
+                    .document(userUid)
+                    .set(u);
+        }, f -> {
+            Log.w("UserRepository", "Update token failed");
+        });
+    }
 }
