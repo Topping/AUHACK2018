@@ -3,4 +3,21 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="material_red_50">#ffebee</color>
+    <color name="material_red_a100_light">#ffbcaf</color>
+    <color name="material_red_200">#ef9a9a</color>
+    <color name="material_red_500">#f44336</color>
+    <color name="material_red_700">#d32f2f</color>
+    <color name="material_red_a200">#ff5252</color>
+    <color name="material_lime_a700">#aeea00</color>
+    <color name="material_purple_a700">#AA00FF</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="facebook_blue">#3d5c99</color>
+
+    <color name="test1">#FF0000</color>
+    <color name="test2">#00FF00</color>
+    <color name="test3">#0000FF</color>
 </resources>

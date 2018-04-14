@@ -1,3 +1,33 @@
 <resources>
-    <string name="app_name">imnotpayingforthat</string>
+    <string name="app_name">DoMoro</string>
+
+    //Register
+    <string name="Title_Register">Registration</string>
+    <string name="Register_Email">Email</string>
+    <string name="Register_Password">Password</string>
+    <string name="Register_ConfirmPassword">Confirm Password</string>
+    <string name="Register_Button">Register</string>
+
+    //Used in more activities
+    <string name="errorMustBeFilled">Must be filled</string>
+    <string name="errorPasswordNotEqual">Passwords do not match</string>
+    <string name="Register_Failed">Registration failed</string>
+    <string name="facebook_application_id">202974580434440</string>
+    <string name="fb_login_protocol_scheme">fb202974580434440</string>
+    <string name="title_activity_timer_screen">TimerScreen</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    //Login names
+    <string name="loginfacebook">Login with Facebook</string>
+    <string name="loginGoogle">Login with Google</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="firstname">Firstname</string>
+    <string name="lastname">Lastname</string>
 </resources>
