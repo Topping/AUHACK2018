@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
@@ -46,6 +47,7 @@ public class CreateTeamFragment extends Fragment implements View.OnClickListener
         teamNameTextBox = view.findViewById(R.id.createteam_edittext_teamname);
         teamDescriptionTextBox = view.findViewById(R.id.createteam_edittext_teamdescription);
         view.findViewById(R.id.createteam_button_cancel).setOnClickListener(this);
+        view.findViewById(R.id.createteam_button_ok).setOnClickListener(this);
         teamRepository = new TeamRepository();
         return view;
     }
@@ -83,15 +85,17 @@ public class CreateTeamFragment extends Fragment implements View.OnClickListener
             case R.id.createteam_button_ok:
                 Team team = new Team(teamNameTextBox.getText().toString(), teamDescriptionTextBox.getText().toString());
                 teamRepository.createTeam(team, this::createTeamSuccess, this::createTeamFailure);
-
                 break;
         }
     }
 
     private void createTeamSuccess(){
-
+        Toast.makeText(this.getContext(), "Created Team", Toast.LENGTH_SHORT).show();
+        getActivity().getSupportFragmentManager().popBackStack();
     }
-    private void createTeamFailure(){}
+    private void createTeamFailure(){
+        Toast.makeText(this.getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
+    }
 
 
     public interface OnCreateTeamFragmentListener {
