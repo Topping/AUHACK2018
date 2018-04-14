@@ -66,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         findViewById(R.id.textview_Register).setOnClickListener(this);
         findViewById(R.id.main_googleLoginButton).setOnClickListener(this);
-        findViewById(R.id.main_facebookLoginButton).setOnClickListener(this);
         findViewById(R.id.button_loginButton).setOnClickListener(this);
         progressBar = findViewById(R.id.progressBar_Login);
         email = findViewById(R.id.editText_email);

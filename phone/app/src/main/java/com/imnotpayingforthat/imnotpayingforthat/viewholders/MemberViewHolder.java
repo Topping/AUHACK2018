@@ -31,4 +31,6 @@ public class MemberViewHolder extends RecyclerView.ViewHolder {
         lastName = itemView.findViewById(R.id.teamdetail_textview_lastname);
         profilePicture = itemView.findViewById(R.id.teamdetail_imageveiw_profilepic);
     }
+
+
 }

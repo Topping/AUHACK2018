@@ -2,10 +2,14 @@ package com.imnotpayingforthat.imnotpayingforthat.repositories;
 
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.imnotpayingforthat.imnotpayingforthat.callbacks.TeamRepositoryCallback;
+import com.google.firebase.firestore.DocumentReference;
+import com.imnotpayingforthat.imnotpayingforthat.callbacks.TeamResponseHandler;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.imnotpayingforthat.imnotpayingforthat.models.TeamResponse;
 
 public class TeamRepository {
     private final String TAG = this.getClass().getSimpleName();
@@ -20,20 +24,21 @@ public class TeamRepository {
     }
 
     // TODO: 14-04-2018 fix callbacks 
-    public void createTeam(Team team, TeamRepositoryCallback successCallback, TeamRepositoryCallback failureCallback) {
+    public void createTeam(Team team, OnSuccessListener<DocumentReference> successListener, OnFailureListener failureListener) {
         String ownerUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         team.setOwnerUid(ownerUID);
         db.collection("teams")
                 .add(team)
-                .addOnSuccessListener(documentReference -> {
-                    Log.d(TAG, "Added team with ID " + documentReference.getId());
-                    successCallback.createTeamResponse();
-                })
-                .addOnFailureListener(e -> {
-                            Log.w(TAG, "Failed adding document", e);
-                            failureCallback.createTeamResponse();
-                        }
-                );
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
+    }
+
+    public void deleteTeam(String teamId, OnSuccessListener successListener, OnFailureListener failureListener) {
+        db.collection("teams")
+                .document(teamId)
+                .delete()
+                .addOnSuccessListener(successListener)
+                .addOnFailureListener(failureListener);
     }
 
     public void joinTeam(Team team) {

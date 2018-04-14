@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.ObjectKey;
 import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.callbacks.TeamRecycleViewHandler;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -20,15 +21,17 @@ import com.imnotpayingforthat.imnotpayingforthat.viewholders.TeamViewHolder;
 public class TeamRecyclerAdapter extends FirestoreRecyclerAdapter<Team, TeamViewHolder> {
 
     private Context context;
+    TeamRecycleViewHandler listener;
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
      *
      * @param options
      */
-    public TeamRecyclerAdapter(@NonNull FirestoreRecyclerOptions<Team> options, Context context) {
+    public TeamRecyclerAdapter(@NonNull FirestoreRecyclerOptions<Team> options, Context context, TeamRecycleViewHandler listener) {
         super(options);
         this.context = context;
+        this.listener = listener;
     }
     private final String TAG = this.getClass().getSimpleName();
 
@@ -49,7 +52,11 @@ public class TeamRecyclerAdapter extends FirestoreRecyclerAdapter<Team, TeamView
     public TeamViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_teamlist_listitem, parent, false);
-
-        return new TeamViewHolder(v);
+        TeamViewHolder t = new TeamViewHolder(v, p -> {
+            Team team = getItem(p);
+            listener.handleTeamItem(team);
+            Log.d("RECYCLERADAPTER", team.getTeamName());
+        });
+        return t;
     }
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.TeamCreationFacade;
 import com.imnotpayingforthat.imnotpayingforthat.repositories.TeamRepository;
 
 
@@ -22,7 +23,7 @@ public class CreateTeamFragment extends Fragment implements View.OnClickListener
     private static final String TAG = "CreateTeamFragment";
     private EditText teamNameTextBox;
     private EditText teamDescriptionTextBox;
-    private TeamRepository teamRepository;
+    private TeamCreationFacade teamCreationFacade;
 
     public CreateTeamFragment() {
         // Required empty public constructor
@@ -47,15 +48,8 @@ public class CreateTeamFragment extends Fragment implements View.OnClickListener
         teamDescriptionTextBox = view.findViewById(R.id.teamdetail_edittext_teamdescription);
         view.findViewById(R.id.teamdetail_button_cancel).setOnClickListener(this);
         view.findViewById(R.id.teamdetail_button_ok).setOnClickListener(this);
-        teamRepository = new TeamRepository();
+        teamCreationFacade = new TeamCreationFacade();
         return view;
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
@@ -83,7 +77,13 @@ public class CreateTeamFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.teamdetail_button_ok:
                 Team team = new Team(teamNameTextBox.getText().toString(), teamDescriptionTextBox.getText().toString());
-                teamRepository.createTeam(team, this::createTeamSuccess, this::createTeamFailure);
+                teamCreationFacade.createTeam(team, success -> {
+                    if(success) {
+                        createTeamSuccess();
+                    } else {
+                        createTeamFailure();
+                    }
+                });
                 break;
         }
     }

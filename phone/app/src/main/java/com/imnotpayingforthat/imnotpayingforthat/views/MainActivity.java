@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
+import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.imnotpayingforthat.imnotpayingforthat.viewmodels.MainViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -115,8 +116,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, TestQueryActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-            fragmentClass = TeamDetailsFragment.class;
-            fragment = TeamDetailsFragment.newInstance("01hGwlNowtZcMfffzs6p");
+
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -190,6 +190,15 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void navigateToCreateTeam() {
         Fragment fragment = CreateTeamFragment.newInstance();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_frameLayout_fragment, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    @Override
+    public void navigateToTeamDetail(Team t) {
+        Fragment fragment = TeamDetailsFragment.newInstance(t);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frameLayout_fragment, fragment)
                 .addToBackStack(null)

@@ -13,13 +13,20 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.adapters.MemberRecyclerClickListener;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.TeamRecyclerAdapter;
+import com.imnotpayingforthat.imnotpayingforthat.adapters.TeamRecyclerClickListener;
+import com.imnotpayingforthat.imnotpayingforthat.callbacks.TeamRecycleViewHandler;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.models.User;
+import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
 import com.imnotpayingforthat.imnotpayingforthat.viewmodels.TeamListViewModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +35,9 @@ import com.google.firebase.firestore.Query;
 
 import java.util.List;
 
-public class TeamListFragment extends Fragment {
+public class TeamListFragment
+        extends Fragment
+        implements TeamRecycleViewHandler {
 
     private static final String TAG = "TeamList";
 
@@ -36,13 +45,10 @@ public class TeamListFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private OnTeamFragmentInteractionListener mListener;
-    private LayoutManagerType currentLayoutManagerType;
+    private Globals.LayoutManagerType currentLayoutManagerType;
     private RecyclerView.LayoutManager currentLayoutManager;
 
-    private enum LayoutManagerType {
-        GRID_LAYOUT_MANAGER,
-        LINEAR_LAYOUT_MANAGER
-    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -96,13 +102,13 @@ public class TeamListFragment extends Fragment {
                 .setQuery(query, Team.class)
                 .setLifecycleOwner(this)
                 .build();
-        adapter = new TeamRecyclerAdapter(options, getContext());
+        adapter = new TeamRecyclerAdapter(options, getContext(), this);
 
         recyclerView = view.findViewById(R.id.team_recyclerView_teamList);
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adapter);
 
-        currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+        currentLayoutManagerType = Globals.LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         setRecyclerViewLayoutManager(currentLayoutManagerType);
         return view;
     }
@@ -124,7 +130,7 @@ public class TeamListFragment extends Fragment {
         mListener = null;
     }
 
-    public void setRecyclerViewLayoutManager(LayoutManagerType layoutManagerType) {
+    public void setRecyclerViewLayoutManager(Globals.LayoutManagerType layoutManagerType) {
         int scrollPosition = 0;
 
         // If a layout manager has already been set, get current scroll position.
@@ -136,24 +142,30 @@ public class TeamListFragment extends Fragment {
         switch (layoutManagerType) {
             case GRID_LAYOUT_MANAGER:
                 currentLayoutManager = new GridLayoutManager(getActivity(), 2);
-                currentLayoutManagerType = LayoutManagerType.GRID_LAYOUT_MANAGER;
+                currentLayoutManagerType = Globals.LayoutManagerType.GRID_LAYOUT_MANAGER;
                 break;
             case LINEAR_LAYOUT_MANAGER:
                 currentLayoutManager = new LinearLayoutManager(getActivity());
-                currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                currentLayoutManagerType = Globals.LayoutManagerType.LINEAR_LAYOUT_MANAGER;
                 break;
             default:
                 currentLayoutManager = new LinearLayoutManager(getActivity());
-                currentLayoutManagerType = LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                currentLayoutManagerType = Globals.LayoutManagerType.LINEAR_LAYOUT_MANAGER;
         }
 
         recyclerView.setLayoutManager(currentLayoutManager);
         recyclerView.scrollToPosition(scrollPosition);
     }
 
+    @Override
+    public void handleTeamItem(Team t) {
+        Toast.makeText(getContext(), t.getTeamName(), Toast.LENGTH_SHORT).show();
+        mListener.navigateToTeamDetail(t);
+    }
+
+
     public interface OnTeamFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
         void navigateToCreateTeam();
+        void navigateToTeamDetail(Team t);
     }
 }
