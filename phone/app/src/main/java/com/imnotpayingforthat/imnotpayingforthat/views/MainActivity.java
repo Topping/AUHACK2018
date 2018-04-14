@@ -27,14 +27,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.wearable.DataClient;
-import com.google.android.gms.wearable.DataEvent;
-import com.google.android.gms.wearable.DataEventBuffer;
-import com.google.android.gms.wearable.DataItem;
-import com.google.android.gms.wearable.DataMapItem;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
-import com.google.android.gms.wearable.Wearable;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
@@ -49,7 +41,7 @@ import com.google.firebase.auth.UserInfo;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TeamListFragment.OnTeamFragmentInteractionListener, CreateTeamFragment.OnCreateTeamFragmentListener,
-        TeamDetailsFragment.OnTeamDetailsInteractionListener {
+        TeamDetailsFragment.OnTeamDetailsInteractionListener, ShoppingListFragment.OnShoppingListInteractionListener{
 
     private MainViewModel viewModel;
     private final String TAG = this.getClass().getSimpleName();
