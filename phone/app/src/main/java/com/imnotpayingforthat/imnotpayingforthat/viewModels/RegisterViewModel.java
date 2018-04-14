@@ -1,4 +1,4 @@
-package com.imnotpayingforthat.imnotpayingforthat.viewModels;
+package com.imnotpayingforthat.imnotpayingforthat.viewmodels;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;

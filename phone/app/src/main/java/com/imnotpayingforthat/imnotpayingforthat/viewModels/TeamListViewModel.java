@@ -1,4 +1,4 @@
-package com.imnotpayingforthat.imnotpayingforthat.viewModels;
+package com.imnotpayingforthat.imnotpayingforthat.viewmodels;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;

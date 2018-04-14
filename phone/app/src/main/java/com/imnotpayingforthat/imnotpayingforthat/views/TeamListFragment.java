@@ -20,11 +20,9 @@ import android.widget.Toast;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.TeamRecyclerAdapter;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
-import com.imnotpayingforthat.imnotpayingforthat.viewModels.TeamListViewModel;
+import com.imnotpayingforthat.imnotpayingforthat.viewmodels.TeamListViewModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
@@ -89,22 +87,10 @@ public class TeamListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_teamlist, container, false);
-        String currentUserUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String memberPath = String.format("members.%s", currentUserUid);
         Query query = FirebaseFirestore.getInstance()
                 .collection("teams")
                 .orderBy("teamName")
                 .limit(50);
-
-        query.get().addOnSuccessListener(l -> {
-           List<Team> t = l.toObjects(Team.class);
-           for(Team x : t) {
-               Log.d(TAG, x.getTeamName());
-           }
-        })
-        .addOnFailureListener(f -> {
-            Log.d(TAG, f.toString());
-        });
 
         FirestoreRecyclerOptions<Team> options = new FirestoreRecyclerOptions.Builder<Team>()
                 .setQuery(query, Team.class)

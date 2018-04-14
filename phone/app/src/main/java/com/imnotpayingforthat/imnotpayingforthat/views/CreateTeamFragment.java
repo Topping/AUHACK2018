@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -44,10 +43,10 @@ public class CreateTeamFragment extends Fragment implements View.OnClickListener
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_team, container, false);
-        teamNameTextBox = view.findViewById(R.id.createteam_edittext_teamname);
-        teamDescriptionTextBox = view.findViewById(R.id.createteam_edittext_teamdescription);
-        view.findViewById(R.id.createteam_button_cancel).setOnClickListener(this);
-        view.findViewById(R.id.createteam_button_ok).setOnClickListener(this);
+        teamNameTextBox = view.findViewById(R.id.teamdetail_edittext_teamname);
+        teamDescriptionTextBox = view.findViewById(R.id.teamdetail_edittext_teamdescription);
+        view.findViewById(R.id.teamdetail_button_cancel).setOnClickListener(this);
+        view.findViewById(R.id.teamdetail_button_ok).setOnClickListener(this);
         teamRepository = new TeamRepository();
         return view;
     }
@@ -79,10 +78,10 @@ public class CreateTeamFragment extends Fragment implements View.OnClickListener
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.createteam_button_cancel:
+            case R.id.teamdetail_button_cancel:
                 getActivity().getSupportFragmentManager().popBackStack();
                 break;
-            case R.id.createteam_button_ok:
+            case R.id.teamdetail_button_ok:
                 Team team = new Team(teamNameTextBox.getText().toString(), teamDescriptionTextBox.getText().toString());
                 teamRepository.createTeam(team, this::createTeamSuccess, this::createTeamFailure);
                 break;

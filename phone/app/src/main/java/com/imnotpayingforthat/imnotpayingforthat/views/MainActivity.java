@@ -18,10 +18,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
-import com.imnotpayingforthat.imnotpayingforthat.viewModels.MainViewModel;
+import com.imnotpayingforthat.imnotpayingforthat.viewmodels.MainViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -30,7 +29,8 @@ import com.google.firebase.auth.UserInfo;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        TeamListFragment.OnTeamFragmentInteractionListener, CreateTeamFragment.OnCreateTeamFragmentListener {
+        TeamListFragment.OnTeamFragmentInteractionListener, CreateTeamFragment.OnCreateTeamFragmentListener,
+        TeamDetailsFragment.OnTeamDetailsInteractionListener {
 
     private MainViewModel viewModel;
     private final String TAG = this.getClass().getSimpleName();
@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity
         // TODO: 4/14/2018 Button remains selected first time the app is launched
         item.setChecked(false);
         int id = item.getItemId();
+        Fragment fragment = null;
         Class fragmentClass = null;
 
         if (id == R.id.nav_camera) {
@@ -114,7 +115,8 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this, TestQueryActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_slideshow) {
-            Intent intent = new Intent(this, CreateTeamFragment.class);
+            fragmentClass = TeamDetailsFragment.class;
+            fragment = TeamDetailsFragment.newInstance("01hGwlNowtZcMfffzs6p");
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
@@ -125,7 +127,9 @@ public class MainActivity extends AppCompatActivity
 
         if(fragmentClass != null) {
             try {
-                Fragment fragment = (Fragment) fragmentClass.newInstance();
+                if(fragment == null) {
+                    fragment = (Fragment) fragmentClass.newInstance();
+                }
                 supportInvalidateOptionsMenu();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout_fragment, fragment)

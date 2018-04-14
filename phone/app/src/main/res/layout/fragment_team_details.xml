@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.CreateTeamFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".views.TeamDetailsFragment">
 
     <EditText
         android:id="@+id/teamdetail_edittext_teamname"
@@ -24,7 +24,6 @@
         android:id="@+id/teamdetail_edittext_teamdescription"
         android:layout_width="0dp"
         android:layout_height="128dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -32,7 +31,6 @@
         android:hint="Team Description"
         android:inputType="text|textMultiLine"
         android:singleLine="false"
-        app:layout_constraintBottom_toTopOf="@+id/teamdetail_button_ok"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/teamdetail_edittext_teamname" />
@@ -43,11 +41,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:layout_marginStart="64dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="8dp"
         android:text="@android:string/ok"
         app:layout_constraintEnd_toStartOf="@+id/teamdetail_button_cancel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teamdetail_edittext_teamdescription" />
+        app:layout_constraintTop_toBottomOf="@+id/teamdetail_recyclerview_members" />
 
     <Button
         android:id="@+id/teamdetail_button_cancel"
@@ -55,10 +53,21 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="64dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="8dp"
         android:text="Cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/teamdetail_button_ok"
+        app:layout_constraintTop_toBottomOf="@+id/teamdetail_recyclerview_members" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/teamdetail_recyclerview_members"
+        android:layout_width="368dp"
+        android:layout_height="273dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/teamdetail_edittext_teamdescription" />
 
 </android.support.constraint.ConstraintLayout>

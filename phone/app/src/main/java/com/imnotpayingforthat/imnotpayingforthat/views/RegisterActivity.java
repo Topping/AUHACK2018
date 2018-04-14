@@ -11,9 +11,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.imnotpayingforthat.imnotpayingforthat.R;
-import com.imnotpayingforthat.imnotpayingforthat.models.Team;
-import com.imnotpayingforthat.imnotpayingforthat.viewModels.MainViewModel;
-import com.imnotpayingforthat.imnotpayingforthat.viewModels.RegisterViewModel;
+import com.imnotpayingforthat.imnotpayingforthat.viewmodels.RegisterViewModel;
 
 import java.util.List;
 
