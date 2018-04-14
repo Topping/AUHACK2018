@@ -121,6 +121,7 @@ public class MainActivity extends AppCompatActivity
         if(fragmentClass != null) {
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
+                supportInvalidateOptionsMenu();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout_fragment, fragment)
                         .commit();
