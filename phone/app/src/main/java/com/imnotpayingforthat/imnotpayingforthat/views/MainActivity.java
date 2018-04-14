@@ -1,11 +1,13 @@
 package com.imnotpayingforthat.imnotpayingforthat.views;
 
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.dynamic.SupportFragmentWrapper;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
 import com.imnotpayingforthat.imnotpayingforthat.viewModels.MainViewModel;
@@ -57,7 +60,7 @@ public class MainActivity extends AppCompatActivity
         viewModel.getCurrentUser().observe(this, user -> {
             // TODO: 10/04/2018 set email og andre informationer i navigation drawer
             // TODO: 10/04/2018 Slet når der er rigtig funktionalitet
-            Toast.makeText(this, "HELLO " + user.getEmail() + " you are using " + user.getProviderId(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "HELLO " + user.getEmail() + " you are using " + user.getProviderId(), Toast.LENGTH_SHORT).show();
         });
         viewModel.updateCurrentUser();
 
@@ -97,10 +100,12 @@ public class MainActivity extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        // TODO: 4/14/2018 Button remains selected first time the app is launched
+        item.setChecked(false);
         int id = item.getItemId();
-        Fragment fragment = null;
         Class fragmentClass = null;
 
         if (id == R.id.nav_camera) {
@@ -120,7 +125,7 @@ public class MainActivity extends AppCompatActivity
 
         if(fragmentClass != null) {
             try {
-                fragment = (Fragment) fragmentClass.newInstance();
+                Fragment fragment = (Fragment) fragmentClass.newInstance();
                 supportInvalidateOptionsMenu();
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.main_frameLayout_fragment, fragment)
