@@ -28,9 +28,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.UserRepository;
+import com.imnotpayingforthat.imnotpayingforthat.services.register.FirebaseInstanceIDService;
 import com.imnotpayingforthat.imnotpayingforthat.services.register.ListenService;
 import com.imnotpayingforthat.imnotpayingforthat.viewmodels.MainViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -111,7 +114,8 @@ public class MainActivity extends AppCompatActivity
         viewModel.getCurrentUser().observe(this, user -> {
             // TODO: 10/04/2018 set email og andre informationer i navigation drawer
             // TODO: 10/04/2018 Slet når der er rigtig funktionalitet
-            Toast.makeText(this, "HELLO " + user.getEmail() + " you are using " + user.getProviderId(), Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(this, "HELLO you are using " + user.getProviderId(), Toast.LENGTH_SHORT).show();
         });
         viewModel.updateCurrentUser();
 
@@ -120,6 +124,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        UserRepository ur = new UserRepository();
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        ur.updateFcmToken(FirebaseAuth.getInstance().getCurrentUser().getUid(), refreshToken);
     }
 
     @Override

@@ -14,6 +14,11 @@ public class FirebaseInstanceIDService extends FirebaseInstanceIdService {
     public void onCreate() {
         super.onCreate();
         userRepository = new UserRepository();
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            String refreshToken = FirebaseInstanceId.getInstance().getToken();
+            userRepository.updateFcmToken(currentUser.getUid(), refreshToken);
+        }
     }
 
     @Override

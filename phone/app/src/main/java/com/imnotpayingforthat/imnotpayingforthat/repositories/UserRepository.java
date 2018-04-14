@@ -46,7 +46,7 @@ public class UserRepository {
     public void updateFcmToken(String userUid, String fcmToken){
         getUser(userUid, l -> {
             User u = l.toObject(User.class);
-            u.setFCM_Token(fcmToken);
+            u.setFcm_Token(fcmToken);
             db.collection(Globals.dbCollection_user)
                     .document(userUid)
                     .set(u);
