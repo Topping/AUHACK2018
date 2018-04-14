@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.MemberRecyclerAdapter;
+import com.imnotpayingforthat.imnotpayingforthat.models.ShoppingListItem;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.imnotpayingforthat.imnotpayingforthat.models.User;
 import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
@@ -49,6 +50,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
     private String teamName;
     private String teamDesc;
     private String ownerUid;
+    private String teamId;
 
     public TeamDetailsFragment() {
 
@@ -90,12 +92,14 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
                 .whereEqualTo("teamName", teamName)
                 .whereEqualTo("teamDescription", teamDesc)
                 .whereEqualTo("ownerUid", ownerUid);
+
         query.get()
                 .addOnSuccessListener(l -> {
                     List<DocumentSnapshot> d = l.getDocuments();
                     if(d.size() >= 1) {
                         DocumentSnapshot doc = d.get(0);
-                        setupRecyclerView(doc.getId());
+                        teamId = doc.getId();
+                        setupRecyclerView();
                     }
                 })
                 .addOnFailureListener(l -> {
@@ -105,8 +109,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         return v;
     }
 
-    private void setupRecyclerView(String teamId) {
-
+    private void setupRecyclerView() {
         Query query = FirebaseFirestore.getInstance()
                 .collection("users")
                 .whereEqualTo("teams." + teamId, true);
@@ -128,7 +131,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.teamdetail_button_list:
-                mListener.navigateToShoppingList();
+                mListener.navigateToShoppingList(teamId);
                break;
         }
     }
@@ -190,6 +193,6 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
     public interface OnTeamDetailsInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-        void navigateToShoppingList();
+        void navigateToShoppingList(String teamId);
     }
 }
