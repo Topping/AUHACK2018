@@ -10,24 +10,8 @@ public class Team {
     private String teamDescription;
     private String ownerUid;
     private List<String> members;
-
-    public Uri getIconUri() {
-        return iconUri;
-    }
-
-    public void setIconUri(Uri iconUri) {
-        this.iconUri = iconUri;
-    }
-
     private Uri iconUri;
-
-    public List<String> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<String> members) {
-        this.members = members;
-    }
+    private List<ShoppingListItem> shoppingList;
 
     public Team() {}
 
@@ -58,5 +42,29 @@ public class Team {
 
     public void setOwnerUid(String uid) {
         ownerUid = uid;
+    }
+
+    public List<ShoppingListItem> getShoppingList() {
+        return shoppingList;
+    }
+
+    public void setShoppingList(List<ShoppingListItem> shoppingList) {
+        this.shoppingList = shoppingList;
+    }
+
+    public Uri getIconUri() {
+        return iconUri;
+    }
+
+    public void setIconUri(Uri iconUri) {
+        this.iconUri = iconUri;
+    }
+
+    public List<String> getMembers() {
+        return members;
+    }
+
+    public void setMembers(List<String> members) {
+        this.members = members;
     }
 }
