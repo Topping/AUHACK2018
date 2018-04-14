@@ -19,8 +19,6 @@ import com.imnotpayingforthat.imnotpayingforthat.viewholders.TeamViewHolder;
 
 public class TeamRecyclerAdapter extends FirestoreRecyclerAdapter<Team, TeamViewHolder> {
 
-public class TeamRecyclerAdapter extends FirestoreRecyclerAdapter<Team, TeamRecyclerAdapter.ViewHolder> {
-
     private Context context;
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
@@ -39,7 +37,10 @@ public class TeamRecyclerAdapter extends FirestoreRecyclerAdapter<Team, TeamRecy
         Log.d(TAG, "Setting item: " + position + " - " + model.getTeamName());
         holder.getTeamName().setText(model.getTeamName());
         holder.getTeamDescription().setText(model.getTeamDescription());
-        
+        GlideApp.with(context)
+                .load("http://thecatapi.com/api/images/get")
+                .signature(new ObjectKey(UUID.randomUUID()))
+                .into(holder.getTeamIcon());
         // TODO: 10/04/2018 set team icon
     }
 
@@ -50,17 +51,5 @@ public class TeamRecyclerAdapter extends FirestoreRecyclerAdapter<Team, TeamRecy
                 .inflate(R.layout.fragment_teamlist_listitem, parent, false);
 
         return new TeamViewHolder(v);
-    }
-
-    @Override
-    protected void onBindViewHolder(@NonNull ViewHolder holder, int position, @NonNull Team model) {
-        Log.d(TAG, "Setting item: " + position + " - " + model.getTeamName());
-        holder.getTeamName().setText(model.getTeamName());
-        holder.getTeamDescription().setText(model.getTeamDescription());
-        GlideApp.with(context)
-                .load("http://thecatapi.com/api/images/get")
-                .signature(new ObjectKey(UUID.randomUUID()))
-                .into(holder.getTeamIcon());
-        // TODO: 10/04/2018 set team icon
     }
 }
