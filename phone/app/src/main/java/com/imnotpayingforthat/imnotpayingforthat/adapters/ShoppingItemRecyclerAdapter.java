@@ -22,9 +22,8 @@ public class ShoppingItemRecyclerAdapter extends FirestoreRecyclerAdapter<Shoppi
      *
      * @param options
      */
-    public ShoppingItemRecyclerAdapter(@NonNull FirestoreRecyclerOptions<ShoppingListItem> options, Context context) {
+    public ShoppingItemRecyclerAdapter(@NonNull FirestoreRecyclerOptions<ShoppingListItem> options) {
         super(options);
-        this.context = context;
     }
     private final String TAG = this.getClass().getSimpleName();
 

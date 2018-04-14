@@ -23,10 +23,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
@@ -254,8 +250,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void navigateToShoppingList() {
+    public void navigateToShoppingList(String teamId) {
+        Bundle bundle = new Bundle();
+        bundle.putString("teamId", teamId);
         Fragment fragment = ShoppingListFragment.newInstance();
+        fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frameLayout_fragment, fragment)
                 .addToBackStack(null)

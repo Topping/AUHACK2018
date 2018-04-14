@@ -4,8 +4,12 @@ public class ShoppingListItem {
     private String itemName;
     private Double itemPrice;
 
-    public ShoppingListItem(String itemName) {
+    public ShoppingListItem() {}
+
+    public ShoppingListItem(String itemName, double itemPrice) {
+
         this.itemName = itemName;
+        this.itemPrice = itemPrice;
     }
 
     public Double getItemPrice() {

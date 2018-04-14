@@ -4,12 +4,27 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.adapters.MemberRecyclerAdapter;
+import com.imnotpayingforthat.imnotpayingforthat.adapters.ShoppingItemRecyclerAdapter;
+import com.imnotpayingforthat.imnotpayingforthat.models.ShoppingListItem;
+import com.imnotpayingforthat.imnotpayingforthat.models.User;
+import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,11 +34,17 @@ import com.imnotpayingforthat.imnotpayingforthat.R;
  * Use the {@link ShoppingListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ShoppingListFragment extends Fragment {
+public class ShoppingListFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "ShoppingListFragment";
+    private EditText itemNameEditText, itemPriceEditText;
     private OnShoppingListInteractionListener mListener;
-    private RecyclerView memberList;
+    private RecyclerView itemList;
+    private String teamId;
+    private RecyclerView.Adapter adapter;
+    private Globals.LayoutManagerType currentLayoutManagerType;
+    private RecyclerView.LayoutManager currentLayoutManager;
+    private Query query;
 
     public ShoppingListFragment() {
         // Required empty public constructor
@@ -38,13 +59,42 @@ public class ShoppingListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(getArguments() != null) {
+            this.teamId = getArguments().getString("teamId");
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        itemList = v.findViewById(R.id.shoppinglist_recyclerview_list);
+        v.findViewById(R.id.shoppinglist_button_additem).setOnClickListener(this);
+        setupRecyclerview();
+        itemPriceEditText = v.findViewById(R.id.shoppinglist_edittext_itemprice);
+        itemNameEditText = v.findViewById(R.id.shoppinglist_edittext_itemname);
+        return v;
+    }
+
+    private void setupRecyclerview() {
+        query = FirebaseFirestore.getInstance()
+                    .collection("teams")
+                    .document(teamId)
+                    .collection("shoppingList")
+                    .orderBy("itemPrice", Query.Direction.ASCENDING);
+
+        FirestoreRecyclerOptions<ShoppingListItem> options = new FirestoreRecyclerOptions.Builder<ShoppingListItem>()
+                .setQuery(query, ShoppingListItem.class)
+                .setLifecycleOwner(this)
+                .build();
+
+        adapter = new ShoppingItemRecyclerAdapter(options);
+        itemList.setHasFixedSize(true);
+        itemList.setAdapter(adapter);
+
+        currentLayoutManagerType = Globals.LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+        setRecyclerViewLayoutManager(currentLayoutManagerType);
     }
 
     @Override
@@ -62,6 +112,65 @@ public class ShoppingListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    public void setRecyclerViewLayoutManager(Globals.LayoutManagerType layoutManagerType) {
+        int scrollPosition = 0;
+
+        // If a layout manager has already been set, get current scroll position.
+        if (itemList.getLayoutManager() != null) {
+            scrollPosition = ((LinearLayoutManager) itemList.getLayoutManager())
+                    .findFirstCompletelyVisibleItemPosition();
+        }
+
+        switch (layoutManagerType) {
+            case GRID_LAYOUT_MANAGER:
+                currentLayoutManager = new GridLayoutManager(getActivity(), 2);
+                currentLayoutManagerType = Globals.LayoutManagerType.GRID_LAYOUT_MANAGER;
+                break;
+            case LINEAR_LAYOUT_MANAGER:
+                currentLayoutManager = new LinearLayoutManager(getActivity());
+                currentLayoutManagerType = Globals.LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+                break;
+            default:
+                currentLayoutManager = new LinearLayoutManager(getActivity());
+                currentLayoutManagerType = Globals.LayoutManagerType.LINEAR_LAYOUT_MANAGER;
+        }
+
+        itemList.setLayoutManager(currentLayoutManager);
+        itemList.scrollToPosition(scrollPosition);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.shoppinglist_button_additem:
+                try {
+                    String itemName = itemNameEditText.getText().toString();
+                    if(itemName.isEmpty()) {
+                        //HMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM😲😲😲😲😲😲
+                        throw new NullPointerException();
+                    }
+                    double itemPrice = Double.parseDouble(itemPriceEditText.getText().toString());
+                    ShoppingListItem item = new ShoppingListItem(itemName, itemPrice);
+                    FirebaseFirestore.getInstance()
+                            .collection("teams")
+                            .document(teamId)
+                            .collection("shoppingList")
+                            .add(item)
+                    .addOnSuccessListener(l -> {
+                        Toast.makeText(getContext(), "Item added", Toast.LENGTH_SHORT).show();
+                        itemNameEditText.setText("");
+                        itemPriceEditText.setText("");
+                    })
+                    .addOnFailureListener(l -> {
+                        Toast.makeText(getContext(), "Failed to add item", Toast.LENGTH_SHORT).show();
+                    });
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), "That price is not a number", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
     }
 
     /**
