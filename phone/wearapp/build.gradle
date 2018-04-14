@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-
-
     defaultConfig {
         applicationId "com.imnotpayingforthat.imnotpayingforthat"
         minSdkVersion 23
