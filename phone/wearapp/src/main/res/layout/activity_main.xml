@@ -10,6 +10,7 @@
     tools:deviceIds="wear">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/mainbackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="@dimen/inner_frame_layout_padding"
@@ -24,6 +25,7 @@
             android:layout_marginTop="8dp"
             android:onClick="ButtonClicked"
             android:text="GIVE A ROUND"
+            android:textSize="23sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

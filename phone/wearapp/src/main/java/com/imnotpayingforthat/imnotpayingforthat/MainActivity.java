@@ -1,14 +1,19 @@
 package com.imnotpayingforthat.imnotpayingforthat;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.wearable.activity.WearableActivity;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,7 +43,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     private Sensor mSensor;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
-    private static final int SHAKE_THRESHOLD = 1500;
+    private static final int SHAKE_THRESHOLD = 1800;
+    private ConstraintLayout constraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        constraintLayout = findViewById(R.id.mainbackground);
     }
 
     @Override
@@ -113,7 +120,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     }
 
     public void ButtonClicked(View view) {
-        Toast.makeText(this, "KNOCK THE TABLE!", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "KNOCK THE TABLE!", Toast.LENGTH_SHORT).show();
+        transisiton(Color.DKGRAY, Color.argb(255,79, 123, 193), 850);
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
@@ -136,15 +144,17 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
                 float speed = (last_x + last_y + last_z - x - y - z) / diffTime * 10000;
 
-                if (speed > SHAKE_THRESHOLD) {
+                if (speed >= SHAKE_THRESHOLD) {
                     DateFormat df = new SimpleDateFormat("dd MM yyyy, HH:mm:ss");
                     String date = df.format(Calendar.getInstance().getTime());
                     sendData("Fahlberg gives beer at this time " + date);
-                    Toast.makeText(this, "GAVE A ROUND", Toast.LENGTH_SHORT).show();
+                    Toast succes = Toast.makeText(this, "SUCCES", Toast.LENGTH_SHORT);
+                    succes.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0,12);
+                    succes.show();
                     mSensorManager.unregisterListener(this);
-
+                    transisiton(Color.argb(255,79, 123, 193), Color.DKGRAY, 500);
+                    transisiton(Color.GREEN, Color.DKGRAY, 850);
                 }
-
                 last_x = x;
                 last_y = y;
                 last_z = z;
@@ -155,6 +165,21 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    public void transisiton(int color1, int color2, int duration)
+    {
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), color1, color2);
+        colorAnimation.setDuration(duration); // milliseconds
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                constraintLayout.setBackgroundColor((int) animator.getAnimatedValue());
+            }
+
+        });
+        colorAnimation.start();
     }
 
 
