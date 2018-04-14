@@ -52,7 +52,8 @@
         <activity
             android:name=".views.MainActivity"
             android:label="@string/title_activity_timer_screen"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
         <activity android:name=".TestQueryActivity" />
 
         <service

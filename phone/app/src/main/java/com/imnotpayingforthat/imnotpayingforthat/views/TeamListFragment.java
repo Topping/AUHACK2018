@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.MemberRecyclerClickListener;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.TeamRecyclerAdapter;

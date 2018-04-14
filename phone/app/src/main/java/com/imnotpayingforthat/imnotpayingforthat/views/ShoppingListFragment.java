@@ -76,7 +76,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int swipedPosition = viewHolder.getAdapterPosition();
-                // TODO: 15-04-2018 GET THAT ID! AND DELETE AT THIS POSITION! 
+                // TODO: 15-04-2018 GET THAT ID! AND DELETE AT THIS POSITION!
                 Toast.makeText(getActivity(),String.valueOf(swipedPosition), Toast.LENGTH_SHORT).show();
             }
         };
