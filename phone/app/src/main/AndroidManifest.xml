@@ -4,6 +4,7 @@
     package="com.imnotpayingforthat.imnotpayingforthat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -48,7 +49,7 @@
             android:name=".views.MainActivity"
             android:label="@string/title_activity_timer_screen"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".TestQueryActivity"></activity>
+        <activity android:name=".TestQueryActivity" />
     </application>
 
 </manifest>
