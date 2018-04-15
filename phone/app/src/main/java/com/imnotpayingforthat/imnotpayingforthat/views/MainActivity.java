@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -23,18 +24,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.imnotpayingforthat.imnotpayingforthat.R;
-import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.TeamRepository;
 import com.imnotpayingforthat.imnotpayingforthat.repositories.UserRepository;
-import com.imnotpayingforthat.imnotpayingforthat.services.register.FirebaseInstanceIDService;
 import com.imnotpayingforthat.imnotpayingforthat.services.register.ListenService;
+import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
 import com.imnotpayingforthat.imnotpayingforthat.viewmodels.MainViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -127,6 +127,10 @@ public class MainActivity extends AppCompatActivity
         UserRepository ur = new UserRepository();
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
         ur.updateFcmToken(FirebaseAuth.getInstance().getCurrentUser().getUid(), refreshToken);
+        SharedPreferences p = getSharedPreferences(Globals.SHARED_PREF, MODE_PRIVATE);
+        String teamId = p.getString(Globals.TEAM_ID_KEY, "");
+        Globals.setSelectedTeamId(teamId);
+        showInitialTeamDetail();
     }
 
     @Override
@@ -293,5 +297,22 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.main_frameLayout_fragment, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void showTeamDetailMainMenu(Team t) {
+        Fragment fragment = TeamDetailsFragment.newInstance(t);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_frameLayout_fragment, fragment)
+                .commit();
+    }
+
+    private void showInitialTeamDetail() {
+        TeamRepository r = new TeamRepository();
+        if(!Globals.getSelectedTeamId().isEmpty()) {
+            r.getTeam(Globals.getSelectedTeamId(), l -> {
+                Team t = l.toObject(Team.class);
+                showTeamDetailMainMenu(t);
+            });
+        }
     }
 }

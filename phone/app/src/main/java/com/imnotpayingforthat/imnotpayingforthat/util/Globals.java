@@ -7,4 +7,17 @@ public class Globals {
         LINEAR_LAYOUT_MANAGER
     }
 
+    public static final String SHARED_PREF = "NOTPAYINGPREFS";
+    public static final String TEAM_ID_KEY = "TEAMIDKEY";
+
+    private static String selectedTeamId;
+
+    public static void setSelectedTeamId(String id) {
+        selectedTeamId = id;
+    }
+
+    public static String getSelectedTeamId() {
+        return selectedTeamId;
+    }
+
 }

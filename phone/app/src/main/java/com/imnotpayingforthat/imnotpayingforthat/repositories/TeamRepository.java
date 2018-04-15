@@ -1,11 +1,13 @@
 package com.imnotpayingforthat.imnotpayingforthat.repositories;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.imnotpayingforthat.imnotpayingforthat.callbacks.TeamResponseHandler;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -39,6 +41,12 @@ public class TeamRepository {
                 .delete()
                 .addOnSuccessListener(successListener)
                 .addOnFailureListener(failureListener);
+    }
+
+    public void getTeam(String teamId, @NonNull OnSuccessListener<DocumentSnapshot> successListener) {
+        db.document("/teams/" + teamId)
+                .get()
+                .addOnSuccessListener(successListener);
     }
 
     public void joinTeam(Team team) {
