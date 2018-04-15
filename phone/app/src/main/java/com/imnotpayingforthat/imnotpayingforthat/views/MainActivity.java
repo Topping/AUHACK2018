@@ -93,6 +93,9 @@ FromTeamFragment{
 
         IntentFilter intentFilter = new IntentFilter("GIVEROUND");
         registerReceiver(giveRoundReceiver, intentFilter);
+
+        IntentFilter itemBoughtFilter = new IntentFilter("ITEMBOUGHT");
+        registerReceiver(itemBoughtReceiver, itemBoughtFilter);
     }
 
     private void configureBoundService() {
@@ -155,6 +158,7 @@ FromTeamFragment{
             boundListenService.stopService();
             unbindService(listenService);
             unregisterReceiver(giveRoundReceiver);
+            unregisterReceiver(itemBoughtReceiver);
         }
     }
 
@@ -256,6 +260,15 @@ FromTeamFragment{
             Toast.makeText(MainActivity.this, intent.getStringExtra("RoundMessage"), Toast.LENGTH_SHORT).show();
         }
     };
+
+    private BroadcastReceiver itemBoughtReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(MainActivity.this, intent.getStringExtra("ITEMBOUGHT"), Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
 
     @Override
     public void navigateToDeleteTeam() {
