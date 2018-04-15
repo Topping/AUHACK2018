@@ -45,7 +45,8 @@ import com.google.firebase.auth.UserInfo;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TeamListFragment.OnTeamFragmentInteractionListener, CreateTeamFragment.OnCreateTeamFragmentListener,
-        TeamDetailsFragment.OnTeamDetailsInteractionListener, ShoppingListFragment.OnShoppingListInteractionListener{
+        TeamDetailsFragment.OnTeamDetailsInteractionListener, ShoppingListFragment.OnShoppingListInteractionListener,
+FromTeamFragment{
 
     private MainViewModel viewModel;
     private final String TAG = this.getClass().getSimpleName();
@@ -305,8 +306,12 @@ public class MainActivity extends AppCompatActivity
         TeamRepository r = new TeamRepository();
         if(!Globals.getSelectedTeamId().isEmpty()) {
             r.getTeam(Globals.getSelectedTeamId(), l -> {
+
                 Team t = l.toObject(Team.class);
-                showTeamDetailMainMenu(t);
+                if(t!=null){
+                    showTeamDetailMainMenu(t);
+                }
+
             });
         }
     }
@@ -321,5 +326,10 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.main_frameLayout_fragment, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void updateFragment() {
+        showInitialTeamDetail();
     }
 }

@@ -203,6 +203,8 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         SharedPreferences p = getActivity().getSharedPreferences(Globals.SHARED_PREF, Context.MODE_PRIVATE);
         p.edit().putString(Globals.TEAM_ID_KEY, teamId).apply();
         Globals.setSelectedTeamId(teamId);
+        MainActivity activity = (MainActivity) getActivity();
+        activity.updateFragment();
     }
 
     public void setRecyclerViewLayoutManager(Globals.LayoutManagerType layoutManagerType) {
