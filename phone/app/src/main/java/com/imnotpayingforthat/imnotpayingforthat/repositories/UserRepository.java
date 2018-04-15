@@ -59,7 +59,7 @@ public class UserRepository {
 
     public void joinTeam(Team t) {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        db.document("/users" + currentUserId)
+        db.document("/users/" + currentUserId)
                 .get()
                 .addOnSuccessListener(l -> {
                     User u = l.toObject(User.class);
