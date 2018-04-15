@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -53,6 +54,7 @@ FromTeamFragment{
     private ServiceConnection listenService;
     private ListenService boundListenService;
     boolean isBound = false;
+    private String activeFragment = "ACTIVEFRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +115,6 @@ FromTeamFragment{
     protected void onStart() {
         super.onStart();
         viewModel.getCurrentUser().observe(this, user -> {
-            // TODO: 10/04/2018 set email og andre informationer i navigation drawer
-            // TODO: 10/04/2018 Slet når der er rigtig funktionalitet
-
-            Toast.makeText(this, "HELLO you are using " + user.getProviderId(), Toast.LENGTH_SHORT).show();
         });
         viewModel.updateCurrentUser();
 
@@ -213,7 +211,6 @@ FromTeamFragment{
                         .commit();
             } catch (Exception e) {
                 Log.e(TAG, "Failed to instantiate fragment on navigation");
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -295,7 +292,7 @@ FromTeamFragment{
     public void navigateToTeamDetail(Team t) {
         Fragment fragment = TeamDetailsFragment.newInstance(t);
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_frameLayout_fragment, fragment)
+                .replace(R.id.main_frameLayout_fragment, fragment, activeFragment)
                 .addToBackStack(null)
                 .commit();
     }
@@ -335,6 +332,19 @@ FromTeamFragment{
 
     @Override
     public void updateFragment() {
-        showInitialTeamDetail();
+        TeamRepository r = new TeamRepository();
+        if(!Globals.getSelectedTeamId().isEmpty()) {
+            r.getTeam(Globals.getSelectedTeamId(), l -> {
+                Team t = l.toObject(Team.class);
+                Fragment frg = null;
+                frg = getSupportFragmentManager().findFragmentByTag(activeFragment);
+                FragmentTransaction tf = getSupportFragmentManager().beginTransaction();
+                tf.detach(frg);
+                Fragment fragment = TeamDetailsFragment.newInstance(t);
+                        tf.replace(R.id.main_frameLayout_fragment, fragment, activeFragment);
+                        tf.addToBackStack(null);
+                        tf.commit();
+            });
+        }
     }
 }

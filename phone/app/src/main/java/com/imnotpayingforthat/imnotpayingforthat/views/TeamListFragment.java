@@ -27,6 +27,8 @@ import com.imnotpayingforthat.imnotpayingforthat.adapters.TeamRecyclerClickListe
 import com.imnotpayingforthat.imnotpayingforthat.callbacks.TeamRecycleViewHandler;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.imnotpayingforthat.imnotpayingforthat.models.User;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.TeamRepository;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.UserRepository;
 import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
 import com.imnotpayingforthat.imnotpayingforthat.viewmodels.TeamListViewModel;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -158,8 +160,9 @@ public class TeamListFragment
 
     @Override
     public void handleTeamItem(Team t) {
-        Toast.makeText(getContext(), t.getTeamName(), Toast.LENGTH_SHORT).show();
         mListener.navigateToTeamDetail(t);
+        UserRepository ur = new UserRepository();
+        ur.joinTeam(t);
     }
 
 

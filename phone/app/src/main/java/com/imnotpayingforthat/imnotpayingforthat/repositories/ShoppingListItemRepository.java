@@ -26,7 +26,10 @@ public class ShoppingListItemRepository {
                 });
     }
 
-    private void addExpenses(String teamId, double amount) {
+    public void addExpenses(String teamId, double amount) {
+        if(teamId.isEmpty()) {
+            return;
+        }
         db.document("/teams/"+teamId)
                 .get()
                 .addOnSuccessListener(l -> {

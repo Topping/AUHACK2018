@@ -52,7 +52,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
     private static final String OWNER_UID_KEY = "OWNERUID";
     private static final String ID_KEY = "IDKEY";
     private RecyclerView memberList;
-    private TextView teamNameTextView, teamDescription;
+    private TextView teamNameTextView, teamDescription, teamExpenses;
     private RecyclerView.Adapter adapter;
     private Globals.LayoutManagerType currentLayoutManagerType;
     private RecyclerView.LayoutManager currentLayoutManager;
@@ -73,7 +73,6 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_setactiveteam) {
             setActiveTeam();
-            Toast.makeText(this.getContext(), "Clicked set active", Toast.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -119,6 +118,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         teamNameTextView = v.findViewById(R.id.teamdetail_edittext_teamname);
         teamDescription = v.findViewById(R.id.teamdetail_edittext_teamdescription);
         memberList = v.findViewById(R.id.teamdetail_recyclerview_members);
+        teamExpenses = v.findViewById(R.id.teamdetail_textview_expenses);
 
         teamNameTextView.setText(teamName);
         teamDescription.setText(teamDesc);
@@ -147,7 +147,8 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
                             Team t = documentSnapshot.toObject(Team.class);
                             teamNameTextView.setText(t.getTeamName());
                             teamDescription.setText(t.getTeamDescription());
-                            Toast.makeText(getActivity(), Double.toString(t.getTotalExpenses()), Toast.LENGTH_SHORT).show();
+                            String expense = Double.toString(t.getTotalExpenses());
+                            teamExpenses.setText(expense + "dkk");
                         }
                     }
                 });
