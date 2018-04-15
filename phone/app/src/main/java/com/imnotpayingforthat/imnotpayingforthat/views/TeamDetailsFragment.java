@@ -85,6 +85,9 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         teamNameTextView = v.findViewById(R.id.teamdetail_edittext_teamname);
         teamDescription = v.findViewById(R.id.teamdetail_edittext_teamdescription);
         memberList = v.findViewById(R.id.teamdetail_recyclerview_members);
+
+        teamNameTextView.setText(teamName);
+        teamDescription.setText(teamDesc);
         v.findViewById(R.id.teamdetail_button_list).setOnClickListener(this);
 
         Query query = FirebaseFirestore.getInstance()

@@ -49,8 +49,6 @@ public class TeamListFragment
     private Globals.LayoutManagerType currentLayoutManagerType;
     private RecyclerView.LayoutManager currentLayoutManager;
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will

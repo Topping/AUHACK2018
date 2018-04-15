@@ -21,9 +21,12 @@ import com.google.firebase.firestore.Query;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.MemberRecyclerAdapter;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.ShoppingItemRecyclerAdapter;
+import com.imnotpayingforthat.imnotpayingforthat.callbacks.ShoppingListRecycleViewHandler;
 import com.imnotpayingforthat.imnotpayingforthat.models.ShoppingListItem;
 import com.imnotpayingforthat.imnotpayingforthat.models.User;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.ShoppingListItemRepository;
 import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
+import com.imnotpayingforthat.imnotpayingforthat.viewholders.ShoppingItemViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +50,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
     private Globals.LayoutManagerType currentLayoutManagerType;
     private RecyclerView.LayoutManager currentLayoutManager;
     private Query query;
+    private ShoppingListItemRepository repository;
 
     public ShoppingListFragment() {
         // Required empty public constructor
@@ -64,6 +68,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
         if(getArguments() != null) {
             this.teamId = getArguments().getString("teamId");
         }
+        repository = new ShoppingListItemRepository();
     }
 
     private void setupItemTouchHelper() {
@@ -76,8 +81,9 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 int swipedPosition = viewHolder.getAdapterPosition();
-                // TODO: 15-04-2018 GET THAT ID! AND DELETE AT THIS POSITION!
-                Toast.makeText(getActivity(),String.valueOf(swipedPosition), Toast.LENGTH_SHORT).show();
+                ShoppingItemRecyclerAdapter v = (ShoppingItemRecyclerAdapter) adapter;
+                ShoppingListItem i = v.getItemAt(swipedPosition);
+                repository.deleteShoppingListItem(teamId, i.getId());
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.callbacks.ShoppingListRecycleViewHandler;
 import com.imnotpayingforthat.imnotpayingforthat.models.ShoppingListItem;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -41,4 +42,8 @@ public class ShoppingItemRecyclerAdapter extends FirestoreRecyclerAdapter<Shoppi
         holder.getItemName().setText(model.getItemName());
         holder.getItemPrice().setText(model.getItemPrice().toString());
         }
+
+    public ShoppingListItem getItemAt(int position) {
+        return getItem(position);
+    }
 }
