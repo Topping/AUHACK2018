@@ -166,5 +166,6 @@ public class TeamListFragment
     public interface OnTeamFragmentInteractionListener {
         void navigateToCreateTeam();
         void navigateToTeamDetail(Team t);
+        void navigateToAddMember(Team t);
     }
 }
