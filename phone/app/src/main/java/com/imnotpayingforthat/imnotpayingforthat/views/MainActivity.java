@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -14,6 +15,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,18 +25,17 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.imnotpayingforthat.imnotpayingforthat.R;
-import com.imnotpayingforthat.imnotpayingforthat.TestQueryActivity;
 import com.imnotpayingforthat.imnotpayingforthat.models.Team;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.TeamRepository;
 import com.imnotpayingforthat.imnotpayingforthat.repositories.UserRepository;
-import com.imnotpayingforthat.imnotpayingforthat.services.register.FirebaseInstanceIDService;
 import com.imnotpayingforthat.imnotpayingforthat.services.register.ListenService;
+import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
 import com.imnotpayingforthat.imnotpayingforthat.viewmodels.MainViewModel;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -45,13 +46,15 @@ import com.google.firebase.auth.UserInfo;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TeamListFragment.OnTeamFragmentInteractionListener, CreateTeamFragment.OnCreateTeamFragmentListener,
-        TeamDetailsFragment.OnTeamDetailsInteractionListener, ShoppingListFragment.OnShoppingListInteractionListener{
+        TeamDetailsFragment.OnTeamDetailsInteractionListener, ShoppingListFragment.OnShoppingListInteractionListener,
+FromTeamFragment{
 
     private MainViewModel viewModel;
     private final String TAG = this.getClass().getSimpleName();
     private ServiceConnection listenService;
     private ListenService boundListenService;
     boolean isBound = false;
+    private String activeFragment = "ACTIVEFRAGMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +93,9 @@ public class MainActivity extends AppCompatActivity
 
         IntentFilter intentFilter = new IntentFilter("GIVEROUND");
         registerReceiver(giveRoundReceiver, intentFilter);
+
+        IntentFilter itemBoughtFilter = new IntentFilter("ITEMBOUGHT");
+        registerReceiver(itemBoughtReceiver, itemBoughtFilter);
     }
 
     private void configureBoundService() {
@@ -112,10 +118,6 @@ public class MainActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
         viewModel.getCurrentUser().observe(this, user -> {
-            // TODO: 10/04/2018 set email og andre informationer i navigation drawer
-            // TODO: 10/04/2018 Slet når der er rigtig funktionalitet
-
-            Toast.makeText(this, "HELLO you are using " + user.getProviderId(), Toast.LENGTH_SHORT).show();
         });
         viewModel.updateCurrentUser();
 
@@ -127,6 +129,10 @@ public class MainActivity extends AppCompatActivity
         UserRepository ur = new UserRepository();
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
         ur.updateFcmToken(FirebaseAuth.getInstance().getCurrentUser().getUid(), refreshToken);
+        SharedPreferences p = getSharedPreferences(Globals.SHARED_PREF, MODE_PRIVATE);
+        String teamId = p.getString(Globals.TEAM_ID_KEY, "");
+        Globals.setSelectedTeamId(teamId);
+        showInitialTeamDetail();
     }
 
     @Override
@@ -152,6 +158,7 @@ public class MainActivity extends AppCompatActivity
             boundListenService.stopService();
             unbindService(listenService);
             unregisterReceiver(giveRoundReceiver);
+            unregisterReceiver(itemBoughtReceiver);
         }
     }
 
@@ -208,7 +215,6 @@ public class MainActivity extends AppCompatActivity
                         .commit();
             } catch (Exception e) {
                 Log.e(TAG, "Failed to instantiate fragment on navigation");
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -255,6 +261,15 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    private BroadcastReceiver itemBoughtReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Toast.makeText(MainActivity.this, intent.getStringExtra("ITEMBOUGHT"), Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
+
     @Override
     public void navigateToDeleteTeam() {
 
@@ -290,8 +305,59 @@ public class MainActivity extends AppCompatActivity
     public void navigateToTeamDetail(Team t) {
         Fragment fragment = TeamDetailsFragment.newInstance(t);
         getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_frameLayout_fragment, fragment, activeFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+    private void showTeamDetailMainMenu(Team t) {
+        Fragment fragment = TeamDetailsFragment.newInstance(t);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_frameLayout_fragment, fragment)
+                .commit();
+    }
+
+    private void showInitialTeamDetail() {
+        TeamRepository r = new TeamRepository();
+        if(!Globals.getSelectedTeamId().isEmpty()) {
+            r.getTeam(Globals.getSelectedTeamId(), l -> {
+
+                Team t = l.toObject(Team.class);
+                if(t!=null){
+                    showTeamDetailMainMenu(t);
+                }
+
+            });
+        }
+    }
+
+    @Override
+    public void navigateToAddMember(Team t) {
+        Bundle bundle = new Bundle();
+        bundle.putString("teamId", t.getId());
+        Fragment fragment = AddMemberFragment.newInstance();
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frameLayout_fragment, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    @Override
+    public void updateFragment() {
+        TeamRepository r = new TeamRepository();
+        if(!Globals.getSelectedTeamId().isEmpty()) {
+            r.getTeam(Globals.getSelectedTeamId(), l -> {
+                Team t = l.toObject(Team.class);
+                Fragment frg = null;
+                frg = getSupportFragmentManager().findFragmentByTag(activeFragment);
+                FragmentTransaction tf = getSupportFragmentManager().beginTransaction();
+                tf.detach(frg);
+                Fragment fragment = TeamDetailsFragment.newInstance(t);
+                        tf.replace(R.id.main_frameLayout_fragment, fragment, activeFragment);
+                        tf.addToBackStack(null);
+                        tf.commit();
+            });
+        }
     }
 }

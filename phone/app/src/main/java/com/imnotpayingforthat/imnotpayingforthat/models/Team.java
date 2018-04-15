@@ -10,8 +10,10 @@ public class Team {
     private String teamDescription;
     private String ownerUid;
     private List<String> members;
+    private String id;
     private Uri iconUri;
     private List<ShoppingListItem> shoppingList;
+    private double totalExpenses;
 
     public Team() {}
 
@@ -66,5 +68,21 @@ public class Team {
 
     public void setMembers(List<String> members) {
         this.members = members;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public double getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    public void setTotalExpenses(double totalExpenses) {
+        this.totalExpenses = totalExpenses;
     }
 }

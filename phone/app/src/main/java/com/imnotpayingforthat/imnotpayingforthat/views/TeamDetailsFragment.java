@@ -1,21 +1,31 @@
 package com.imnotpayingforthat.imnotpayingforthat.views;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.MemberRecyclerAdapter;
@@ -40,8 +50,9 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
     private static final String TEAM_NAME_KEY = "TEAMNAME";
     private static final String TEAM_DESC_KEY = "TEAMDESCRIPTION";
     private static final String OWNER_UID_KEY = "OWNERUID";
+    private static final String ID_KEY = "IDKEY";
     private RecyclerView memberList;
-    private TextView teamNameTextView, teamDescription;
+    private TextView teamNameTextView, teamDescription, teamExpenses;
     private RecyclerView.Adapter adapter;
     private Globals.LayoutManagerType currentLayoutManagerType;
     private RecyclerView.LayoutManager currentLayoutManager;
@@ -52,8 +63,28 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
     private String ownerUid;
     private String teamId;
 
-    public TeamDetailsFragment() {
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
 
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_setactiveteam) {
+            setActiveTeam();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.teamdetails, menu);
+    }
+
+    public TeamDetailsFragment() {
+        this.setHasOptionsMenu(true);
     }
 
     // TODO: Rename and change types and number of parameters
@@ -63,6 +94,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         bundle.putString(TEAM_NAME_KEY, team.getTeamName());
         bundle.putString(TEAM_DESC_KEY, team.getTeamDescription());
         bundle.putString(OWNER_UID_KEY, team.getOwnerUid());
+        bundle.putString(ID_KEY, team.getId());
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -74,6 +106,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
             this.teamName = getArguments().getString(TEAM_NAME_KEY);
             this.teamDesc = getArguments().getString(TEAM_DESC_KEY);
             this.ownerUid = getArguments().getString(OWNER_UID_KEY);
+            this.teamId = getArguments().getString(ID_KEY);
         }
     }
 
@@ -85,30 +118,43 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         teamNameTextView = v.findViewById(R.id.teamdetail_edittext_teamname);
         teamDescription = v.findViewById(R.id.teamdetail_edittext_teamdescription);
         memberList = v.findViewById(R.id.teamdetail_recyclerview_members);
+        teamExpenses = v.findViewById(R.id.teamdetail_textview_expenses);
 
         teamNameTextView.setText(teamName);
         teamDescription.setText(teamDesc);
         v.findViewById(R.id.teamdetail_button_list).setOnClickListener(this);
+        String currentId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if(!currentId.equals(ownerUid)) {
+            teamNameTextView.setFocusable(false);
+            teamNameTextView.setFocusableInTouchMode(false);
+            teamNameTextView.setClickable(false);
+            teamDescription.setFocusableInTouchMode(false);
+            teamDescription.setFocusable(false);
+            teamDescription.setClickable(false);
+        }
 
-        Query query = FirebaseFirestore.getInstance()
-                .collection("teams")
-                .whereEqualTo("teamName", teamName)
-                .whereEqualTo("teamDescription", teamDesc)
-                .whereEqualTo("ownerUid", ownerUid);
+        FirebaseFirestore.getInstance()
+                .document("/teams/"+teamId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if(e != null) {
+                            Log.w("TeamDetails", e);
+                            return;
+                        }
 
-        query.get()
-                .addOnSuccessListener(l -> {
-                    List<DocumentSnapshot> d = l.getDocuments();
-                    if(d.size() >= 1) {
-                        DocumentSnapshot doc = d.get(0);
-                        teamId = doc.getId();
-                        setupRecyclerView();
+                        if(documentSnapshot != null && documentSnapshot.exists()) {
+                            Team t = documentSnapshot.toObject(Team.class);
+                            teamNameTextView.setText(t.getTeamName());
+                            teamDescription.setText(t.getTeamDescription());
+                            String expense = Double.toString(t.getTotalExpenses());
+                            teamExpenses.setText(expense + "dkk");
+                        }
                     }
-                })
-                .addOnFailureListener(l -> {
-                    Log.d("TEST", "OK");
                 });
 
+
+        setupRecyclerView();
         return v;
     }
 
@@ -156,6 +202,14 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         mListener = null;
     }
 
+    private void setActiveTeam() {
+        SharedPreferences p = getActivity().getSharedPreferences(Globals.SHARED_PREF, Context.MODE_PRIVATE);
+        p.edit().putString(Globals.TEAM_ID_KEY, teamId).apply();
+        Globals.setSelectedTeamId(teamId);
+        MainActivity activity = (MainActivity) getActivity();
+        activity.updateFragment();
+    }
+
     public void setRecyclerViewLayoutManager(Globals.LayoutManagerType layoutManagerType) {
         int scrollPosition = 0;
 
@@ -197,5 +251,6 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void navigateToShoppingList(String teamId);
+        void navigateToCreateTeam();
     }
 }

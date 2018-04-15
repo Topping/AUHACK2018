@@ -34,4 +34,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    //teamdetails
+    <string name="teamdetails_setactive">Set as active team</string>
 </resources>

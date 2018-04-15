@@ -83,7 +83,7 @@ public class ShoppingListFragment extends Fragment implements View.OnClickListen
                 int swipedPosition = viewHolder.getAdapterPosition();
                 ShoppingItemRecyclerAdapter v = (ShoppingItemRecyclerAdapter) adapter;
                 ShoppingListItem i = v.getItemAt(swipedPosition);
-                repository.deleteShoppingListItem(teamId, i.getId());
+                repository.deleteShoppingListItem(teamId, i);
             }
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
