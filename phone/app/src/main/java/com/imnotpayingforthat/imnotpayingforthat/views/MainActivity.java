@@ -315,4 +315,16 @@ public class MainActivity extends AppCompatActivity
             });
         }
     }
+
+    @Override
+    public void navigateToAddMember(Team t) {
+        Bundle bundle = new Bundle();
+        bundle.putString("teamId", "hej");
+        Fragment fragment = ShoppingListFragment.newInstance();
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_frameLayout_fragment, fragment)
+                .addToBackStack(null)
+                .commit();
+    }
 }
