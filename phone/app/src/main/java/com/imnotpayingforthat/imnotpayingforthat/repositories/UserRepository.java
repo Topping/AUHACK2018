@@ -64,7 +64,7 @@ public class UserRepository {
                 .addOnSuccessListener(l -> {
                     User u = l.toObject(User.class);
                     if(u != null) {
-                        if(!u.getTeams().get(t.getId())) {
+                        if(u.getTeams().get(t.getId()) == null) {
                             u.getTeams().put(t.getId(), true);
                             updateUser(currentUserId, u, a -> {}, b -> {} );
                         }
