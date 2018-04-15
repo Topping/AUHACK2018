@@ -13,6 +13,7 @@ public class Team {
     private String id;
     private Uri iconUri;
     private List<ShoppingListItem> shoppingList;
+    private double totalExpenses;
 
     public Team() {}
 
@@ -75,5 +76,13 @@ public class Team {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public double getTotalExpenses() {
+        return totalExpenses;
+    }
+
+    public void setTotalExpenses(double totalExpenses) {
+        this.totalExpenses = totalExpenses;
     }
 }
