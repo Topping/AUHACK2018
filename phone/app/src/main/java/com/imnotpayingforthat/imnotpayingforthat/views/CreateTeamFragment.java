@@ -89,7 +89,7 @@ public class CreateTeamFragment extends Fragment implements View.OnClickListener
     }
 
     private void createTeamSuccess(){
-        Toast.makeText(this.getContext(), "Created Team", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Created Team", Toast.LENGTH_SHORT).show();
         getActivity().getSupportFragmentManager().popBackStack();
     }
     private void createTeamFailure(){
