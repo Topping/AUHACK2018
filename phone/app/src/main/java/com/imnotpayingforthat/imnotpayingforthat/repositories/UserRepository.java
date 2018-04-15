@@ -5,9 +5,11 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.imnotpayingforthat.imnotpayingforthat.callbacks.UserResponseHandler;
+import com.imnotpayingforthat.imnotpayingforthat.models.Team;
 import com.imnotpayingforthat.imnotpayingforthat.models.UserResponse;
 import com.imnotpayingforthat.imnotpayingforthat.models.User;
 import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
@@ -53,5 +55,20 @@ public class UserRepository {
         }, f -> {
             Log.w("UserRepository", "Update token failed");
         });
+    }
+
+    public void joinTeam(Team t) {
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db.document("/users" + currentUserId)
+                .get()
+                .addOnSuccessListener(l -> {
+                    User u = l.toObject(User.class);
+                    if(u != null) {
+                        if(!u.getTeams().get(t.getId())) {
+                            u.getTeams().put(t.getId(), true);
+                            updateUser(currentUserId, u, a -> {}, b -> {} );
+                        }
+                    }
+                });
     }
 }

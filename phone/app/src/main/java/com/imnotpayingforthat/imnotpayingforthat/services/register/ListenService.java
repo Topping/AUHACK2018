@@ -19,6 +19,8 @@ import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.Wearable;
 import com.imnotpayingforthat.imnotpayingforthat.R;
+import com.imnotpayingforthat.imnotpayingforthat.repositories.ShoppingListItemRepository;
+import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
 
 public class ListenService extends Service implements DataClient.OnDataChangedListener {
     private String TAG = "ListenService";
@@ -71,6 +73,8 @@ public class ListenService extends Service implements DataClient.OnDataChangedLi
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                     String message = dataMapItem.getDataMap().getString("message");
                     Log.v(TAG, "Wear activity received message: " + message);
+                    ShoppingListItemRepository i = new ShoppingListItemRepository();
+                    i.addExpenses(Globals.getSelectedTeamId(), 200);
                     // Display message in UI
                     makeNotification(message);
                     broadcastResult("GIVEROUND", message);
