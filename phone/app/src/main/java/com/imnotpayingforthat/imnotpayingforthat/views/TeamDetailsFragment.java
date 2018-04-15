@@ -73,7 +73,6 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_setactiveteam) {
             setActiveTeam();
-            Toast.makeText(this.getContext(), "Clicked set active", Toast.LENGTH_LONG).show();
         }
 
         return super.onOptionsItemSelected(item);
@@ -147,7 +146,6 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
                             Team t = documentSnapshot.toObject(Team.class);
                             teamNameTextView.setText(t.getTeamName());
                             teamDescription.setText(t.getTeamDescription());
-                            Toast.makeText(getContext(), Double.toString(t.getTotalExpenses()), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
