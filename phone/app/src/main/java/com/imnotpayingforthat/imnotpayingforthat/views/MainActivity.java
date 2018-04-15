@@ -311,8 +311,12 @@ FromTeamFragment{
         TeamRepository r = new TeamRepository();
         if(!Globals.getSelectedTeamId().isEmpty()) {
             r.getTeam(Globals.getSelectedTeamId(), l -> {
+
                 Team t = l.toObject(Team.class);
-                showTeamDetailMainMenu(t);
+                if(t!=null){
+                    showTeamDetailMainMenu(t);
+                }
+
             });
         }
     }

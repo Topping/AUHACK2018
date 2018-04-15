@@ -147,7 +147,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
                             Team t = documentSnapshot.toObject(Team.class);
                             teamNameTextView.setText(t.getTeamName());
                             teamDescription.setText(t.getTeamDescription());
-                            Toast.makeText(getContext(), Double.toString(t.getTotalExpenses()), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), Double.toString(t.getTotalExpenses()), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
