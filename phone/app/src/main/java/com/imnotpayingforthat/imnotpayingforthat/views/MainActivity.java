@@ -322,7 +322,7 @@ FromTeamFragment{
     public void navigateToAddMember(Team t) {
         Bundle bundle = new Bundle();
         bundle.putString("teamId", t.getId());
-        Fragment fragment = ShoppingListFragment.newInstance();
+        Fragment fragment = AddMemberFragment.newInstance();
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.main_frameLayout_fragment, fragment)
