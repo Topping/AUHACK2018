@@ -250,5 +250,6 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
         void navigateToShoppingList(String teamId);
+        void navigateToCreateTeam();
     }
 }
