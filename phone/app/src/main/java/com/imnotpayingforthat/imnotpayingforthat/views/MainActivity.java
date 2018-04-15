@@ -320,7 +320,7 @@ FromTeamFragment{
     @Override
     public void navigateToAddMember(Team t) {
         Bundle bundle = new Bundle();
-        bundle.putString("teamId", "hej");
+        bundle.putString("teamId", t.getId());
         Fragment fragment = ShoppingListFragment.newInstance();
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction()

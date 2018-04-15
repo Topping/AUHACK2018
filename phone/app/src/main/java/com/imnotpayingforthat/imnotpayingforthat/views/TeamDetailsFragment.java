@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,8 +21,11 @@ import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.imnotpayingforthat.imnotpayingforthat.R;
 import com.imnotpayingforthat.imnotpayingforthat.adapters.MemberRecyclerAdapter;
@@ -129,6 +133,26 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
             teamDescription.setClickable(false);
         }
 
+        FirebaseFirestore.getInstance()
+                .document("/teams/"+teamId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                        if(e != null) {
+                            Log.w("TeamDetails", e);
+                            return;
+                        }
+
+                        if(documentSnapshot != null && documentSnapshot.exists()) {
+                            Team t = documentSnapshot.toObject(Team.class);
+                            teamNameTextView.setText(t.getTeamName());
+                            teamDescription.setText(t.getTeamDescription());
+                            Toast.makeText(getContext(), Double.toString(t.getTotalExpenses()), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
         setupRecyclerView();
         return v;
     }
@@ -179,7 +203,7 @@ public class TeamDetailsFragment extends Fragment implements View.OnClickListene
 
     private void setActiveTeam() {
         SharedPreferences p = getActivity().getSharedPreferences(Globals.SHARED_PREF, Context.MODE_PRIVATE);
-        p.edit().putString(Globals.TEAM_ID_KEY, teamId).commit();
+        p.edit().putString(Globals.TEAM_ID_KEY, teamId).apply();
         Globals.setSelectedTeamId(teamId);
         MainActivity activity = (MainActivity) getActivity();
         activity.updateFragment();

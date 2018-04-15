@@ -49,6 +49,10 @@ public class TeamRepository {
                 .addOnSuccessListener(successListener);
     }
 
+    public void addMoneyToTeam(String teamid, double amount) {
+
+    }
+
     public void joinTeam(Team team) {
 
     }
