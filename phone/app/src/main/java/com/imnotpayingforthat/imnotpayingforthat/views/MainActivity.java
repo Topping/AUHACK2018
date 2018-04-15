@@ -115,10 +115,6 @@ FromTeamFragment{
     protected void onStart() {
         super.onStart();
         viewModel.getCurrentUser().observe(this, user -> {
-            // TODO: 10/04/2018 set email og andre informationer i navigation drawer
-            // TODO: 10/04/2018 Slet når der er rigtig funktionalitet
-
-            Toast.makeText(this, "HELLO you are using " + user.getProviderId(), Toast.LENGTH_SHORT).show();
         });
         viewModel.updateCurrentUser();
 
@@ -215,7 +211,6 @@ FromTeamFragment{
                         .commit();
             } catch (Exception e) {
                 Log.e(TAG, "Failed to instantiate fragment on navigation");
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
             }
         }
 
@@ -313,8 +308,12 @@ FromTeamFragment{
         TeamRepository r = new TeamRepository();
         if(!Globals.getSelectedTeamId().isEmpty()) {
             r.getTeam(Globals.getSelectedTeamId(), l -> {
+
                 Team t = l.toObject(Team.class);
-                showTeamDetailMainMenu(t);
+                if(t!=null){
+                    showTeamDetailMainMenu(t);
+                }
+
             });
         }
     }
