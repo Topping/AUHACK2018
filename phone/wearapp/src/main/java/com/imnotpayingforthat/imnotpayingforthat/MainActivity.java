@@ -4,11 +4,16 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.wearable.activity.WearableActivity;
@@ -33,6 +38,7 @@ import com.google.android.gms.wearable.Wearable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
 
 public class MainActivity extends WearableActivity implements SensorEventListener {
 
@@ -45,6 +51,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 1800;
     private ConstraintLayout constraintLayout;
+    private Random random;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +64,7 @@ public class MainActivity extends WearableActivity implements SensorEventListene
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         constraintLayout = findViewById(R.id.mainbackground);
+        random = new Random();
     }
 
     @Override
@@ -121,7 +129,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     public void ButtonClicked(View view) {
 //        Toast.makeText(this, "KNOCK THE TABLE!", Toast.LENGTH_SHORT).show();
-        transisiton(Color.DKGRAY, Color.argb(255,79, 123, 193), 850);
+        vibrate(75);
+        transisiton(0, randomColor(), 850);
         mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
@@ -152,8 +161,8 @@ public class MainActivity extends WearableActivity implements SensorEventListene
                     succes.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0,12);
                     succes.show();
                     mSensorManager.unregisterListener(this);
-                    transisiton(Color.argb(255,79, 123, 193), Color.DKGRAY, 500);
-                    transisiton(Color.GREEN, Color.DKGRAY, 850);
+                    transisiton(Color.GREEN, Color.DKGRAY, 1000);
+                    vibrate(1000);
                 }
                 last_x = x;
                 last_y = y;
@@ -167,8 +176,34 @@ public class MainActivity extends WearableActivity implements SensorEventListene
 
     }
 
+//    public void transisiton(int color1, int color2, int duration)
+//    {
+//        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), color1, color2);
+//        colorAnimation.setDuration(duration); // milliseconds
+//        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator animator) {
+//                constraintLayout.setBackgroundColor((int) animator.getAnimatedValue());
+//            }
+//
+//        });
+//        colorAnimation.start();
+//    }
+
     public void transisiton(int color1, int color2, int duration)
     {
+        if(color1 == 0)
+        {
+            color1 = Color.TRANSPARENT;
+            Drawable background = constraintLayout.getBackground();
+            if (background instanceof ColorDrawable)
+            {
+                color1 = ((ColorDrawable) background).getColor();
+            }
+
+        }
+
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), color1, color2);
         colorAnimation.setDuration(duration); // milliseconds
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -177,10 +212,26 @@ public class MainActivity extends WearableActivity implements SensorEventListene
             public void onAnimationUpdate(ValueAnimator animator) {
                 constraintLayout.setBackgroundColor((int) animator.getAnimatedValue());
             }
-
         });
         colorAnimation.start();
     }
 
+
+
+    public void vibrate(int duration)
+    {
+        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(duration, VibrationEffect.DEFAULT_AMPLITUDE));
+        }else{
+            //deprecated in API 26
+            v.vibrate(duration);
+        }
+    }
+
+    public int randomColor()
+    {
+        return Color.argb(255, random.nextInt(255), random.nextInt(100), random.nextInt(255));
+    }
 
 }
