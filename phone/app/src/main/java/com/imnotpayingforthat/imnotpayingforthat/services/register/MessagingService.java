@@ -22,6 +22,7 @@ public class MessagingService extends FirebaseMessagingService {
         String notificationBody = "";
         String notificationTitle = "";
         String notificationData = "";
+
         try {
             notificationData = remoteMessage.getData().toString();
             notificationTitle = remoteMessage.getNotification().getTitle();
