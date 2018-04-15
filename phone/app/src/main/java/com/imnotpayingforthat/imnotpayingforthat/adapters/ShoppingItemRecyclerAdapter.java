@@ -13,6 +13,7 @@ import com.imnotpayingforthat.imnotpayingforthat.models.ShoppingListItem;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
+import com.imnotpayingforthat.imnotpayingforthat.util.Globals;
 import com.imnotpayingforthat.imnotpayingforthat.viewholders.ShoppingItemViewHolder;
 
 import java.util.Random;
@@ -36,8 +37,7 @@ public class ShoppingItemRecyclerAdapter extends FirestoreRecyclerAdapter<Shoppi
     public ShoppingItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fragment_shoppinglist_listitem, parent, false);
-        Random rand = new Random();
-        v.setBackgroundColor(Color.argb(75, rand.nextInt(255),rand.nextInt(255),rand.nextInt(255)));
+        v.setBackgroundColor(Globals.getNextColor());
         return new ShoppingItemViewHolder(v);
     }
 
