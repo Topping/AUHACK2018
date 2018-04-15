@@ -115,7 +115,7 @@ public class ListenService extends Service implements DataClient.OnDataChangedLi
         }
 
         return new NotificationCompat.Builder(getApplicationContext(), "WeatherChannelID")
-                .setContentTitle("NEW ROUND")
+                .setContentTitle("ROUND MESSAGE")
                 .setContentText(message)
                 .setSmallIcon(R.mipmap.freeround_ic)
                 .build();
